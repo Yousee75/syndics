@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Automatisation pour Syndics de Copropriété | Rapport Stratégique</title>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+
+  <!-- Optional GSAP (kept for smoothness) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    :root{
+      --primary:#1a5276;
+      --secondary:#2e86c1;
+      --accent:#e74c3c;
+      --success:#27ae60;
+      --warning:#f39c12;
+      --info:#3498db;
+      --light:#ecf0f1;
+      --dark:#2c3e50;
+      --text:#2c3e50;
+      --bg-gradient:linear-gradient(135deg,#1a5276 0%,#2e86c1 100%);
+      --card-shadow:0 10px 30px rgba(0,0,0,.08);
+      --hover-shadow:0 15px 35px rgba(0,0,0,.12);
+      --section-spacing:3rem;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'Poppins',sans-serif;
+      color:var(--text);
+      background:linear-gradient(135deg,#f5f7fa 0%,#e3e8f0 100%);
+      line-height:1.7;min-height:100vh
+    }
+    .container{max-width:1200px;margin:0 auto;padding:2rem}
+
+    /* Header */
+    .main-header{
+      background:var(--bg-gradient);color:#fff;padding:4rem 2rem;border-radius:20px;
+      margin-bottom:var(--section-spacing);box-shadow:var(--card-shadow);text-align:center;position:relative;overflow:hidden
+    }
+    .main-header::before{
+      content:'';position:absolute;inset:0;
+      background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.08)"/></svg>') center/cover no-repeat
+    }
+    .main-header h1{font-size:2.8rem;font-weight:700;margin-bottom:1rem;position:relative}
+    .subtitle{position:relative;max-width:900px;margin:0 auto 1.25rem;opacity:.95}
+
+    /* Tabs */
+    .tabs-nav{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-bottom:var(--section-spacing)}
+    .tab-button{
+      background:#fff;border:none;border-radius:50px;padding:1rem 1.25rem;color:var(--primary);
+      font-weight:600;cursor:pointer;box-shadow:var(--card-shadow);display:flex;gap:.6rem;align-items:center;
+      transition:transform .25s ease, box-shadow .3s ease
+    }
+    .tab-button:hover{transform:translateY(-3px);box-shadow:var(--hover-shadow)}
+    .tab-button.active{background:var(--primary);color:#fff}
+    .tab-pane{display:none;animation:fadeInUp .6s ease-out}
+    .tab-pane.active{display:block}
+
+    /* Sections */
+    .section{
+      background:#fff;border-radius:20px;padding:2rem;box-shadow:var(--card-shadow);
+      margin-bottom:var(--section-spacing);opacity:0;transform:translateY(30px)
+    }
+    .section.visible{opacity:1;transform:translateY(0)}
+    .section-title{
+      font-size:1.8rem;color:var(--primary);display:flex;align-items:center;gap:.75rem;
+      padding-bottom:1rem;border-bottom:3px solid var(--light);margin-bottom:1.5rem
+    }
+    .section-title i{color:var(--secondary)}
+
+    /* Lists */
+    .problem-list,.benefit-list{list-style:none}
+    .problem-list li,.benefit-list li{
+      border-bottom:1px solid #eee;padding:.8rem 0
+    }
+    .problem-list li::marker,.benefit-list li::marker{content:''}
+    .problem-list li:before{content:"❌";color:var(--accent);margin-right:.5rem}
+    .benefit-list li:before{content:"✨";color:var(--success);margin-right:.5rem}
+
+    /* KPI */
+    .kpi-section{
+      display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:.5rem
+    }
+    .kpi-card{
+      background:#fff;border-radius:14px;padding:1.25rem;text-align:center;border-top:4px solid var(--info);
+      box-shadow:var(--card-shadow);transition:transform .25s ease
+    }
+    .kpi-card:hover{transform:translateY(-4px)}
+    .kpi-number{font-size:2rem;font-weight:700;color:var(--primary)}
+    .kpi-label{font-size:.95rem;color:#555}
+
+    /* Before/After */
+    .before-after-grid{display:grid;gap:1.5rem;grid-template-columns:1fr 1fr}
+    .before,.after{padding:1.25rem;border-radius:14px}
+    .before{background:linear-gradient(135deg,#ffeaea,#ffd7d7);border-left:5px solid var(--accent)}
+    .after{background:linear-gradient(135deg,#e8f7ef,#d8f0e3);border-left:5px solid var(--success)}
+    .after-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .after-grid .benefit-item{
+      display:flex;gap:.75rem;align-items:flex-start;background:#fff;border-radius:10px;padding:.85rem;
+      box-shadow:0 6px 16px rgba(0,0,0,.06);border-left:4px solid var(--secondary)
+    }
+    .benefit-icon{font-size:1.1rem;color:var(--secondary);min-width:22px;text-align:center;margin-top:.1rem}
+    .benefit-content b{color:var(--dark)}
+
+    /* Tools */
+    .tools-grid{display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));margin-top:.5rem}
+    .tool-card{
+      background:linear-gradient(135deg,#ffffff 0%,#f8f9fb 100%);border-radius:16px;padding:1.5rem;border-left:5px solid var(--secondary);
+      box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:.75rem;transition:transform .25s ease, box-shadow .3s ease
+    }
+    .tool-card:hover{transform:translateY(-8px);box-shadow:var(--hover-shadow)}
+    .tool-card h3{font-size:1.15rem;color:var(--primary);display:flex;gap:.6rem;align-items:center;margin-bottom:.25rem}
+    .tool-description{font-size:.98rem;color:#333}
+    .tool-before-after{display:grid;gap:.5rem;margin-top:.5rem}
+    .tool-before,.tool-after{padding:.6rem;border-radius:8px;border-left:3px solid}
+    .tool-before{background:#ffeaea;border-left-color:var(--accent)}
+    .tool-after{background:#e8f7ef;border-left-color:var(--success)}
+    .badge{
+      margin-top:auto;display:inline-block;background:var(--info);color:#fff;font-weight:700;border-radius:999px;
+      padding:.35rem .8rem;font-size:.85rem
+    }
+    .note{font-size:.85rem;color:#666;margin-top:.25rem}
+
+    /* Timeline (simplified) */
+    .timeline{border-left:3px solid var(--secondary);padding-left:1rem}
+    .timeline-item{margin:1rem 0}
+    .timeline-phase{font-weight:700;color:var(--primary);margin-bottom:.35rem}
+
+    /* FAQ */
+    .faq-columns{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+    .faq-item{border-bottom:1px dashed #cfd8dc;padding-bottom:.9rem}
+    .faq-question{font-weight:700;color:var(--primary);margin-bottom:.25rem}
+
+    .highlight{background:linear-gradient(120deg,#fff9c4 0%,#f3e5f5 100%);padding:.15rem .45rem;border-radius:6px}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .before-after-grid{grid-template-columns:1fr}
+      .after-grid{grid-template-columns:1fr}
+    }
+    @media (max-width: 600px){
+      .tab-button{width:100%;justify-content:center}
+      .kpi-number{font-size:1.6rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="main-header">
+      <h1><i class="fas fa-city"></i> Automatisation pour Syndics de Copropriété</h1>
+      <p class="subtitle">Moins de paperasse, plus d’efficacité. Des outils simples qui s’ajoutent à vos habitudes pour gagner du temps sur les <span class="highlight">tâches manuelles et répétitives</span>.</p>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="tabs-nav">
+      <button class="tab-button active" data-tab="resume"><i class="fas fa-file-signature"></i> Résumé</button>
+      <button class="tab-button" data-tab="benefices"><i class="fas fa-rocket"></i> Bénéfices</button>
+      <button class="tab-button" data-tab="solutions"><i class="fas fa-toolbox"></i> Outils</button>
+      <button class="tab-button" data-tab="feuille-route"><i class="fas fa-road"></i> Feuille de Route</button>
+      <button class="tab-button" data-tab="gouvernance"><i class="fas fa-lock"></i> Gouvernance & FAQ</button>
+      <button class="tab-button" data-tab="personnalisation"><i class="fas fa-drafting-compass"></i> Personnalisation</button>
+    </nav>
+
+    <!-- RESUME -->
+    <div id="resume" class="tab-pane active">
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-file-signature"></i> Résumé exécutif</h2>
+        <p>Les petits cabinets (2–3 personnes) jonglent au quotidien avec des e-mails, des factures, des devis, des urgences techniques et des obligations réglementaires. Nous proposons des <b>automatisations ciblées</b> qui s’installent simplement, <b>sans remplacer vos outils</b>, pour récupérer du temps et fiabiliser vos dossiers.</p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-gauge-high"></i> KPI clés attendus</h2>
+        <div class="kpi-section">
+          <div class="kpi-card"><div class="kpi-number">+40%</div><div class="kpi-label">Temps gagné (administratif)</div></div>
+          <div class="kpi-card"><div class="kpi-number">-60%</div><div class="kpi-label">Erreurs documentaires</div></div>
+          <div class="kpi-card"><div class="kpi-number">-70%</div><div class="kpi-label">Appels/rappels répétitifs</div></div>
+          <div class="kpi-card"><div class="kpi-number">≤ 2 sem.</div><div class="kpi-label">1er outil opérationnel</div></div>
+          <div class="kpi-card"><div class="kpi-number">+20 pts</div><div class="kpi-label">Satisfaction copropriétaires</div></div>
+          <div class="kpi-card"><div class="kpi-number">-50%</div><div class="kpi-label">Délai traitement tickets</div></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-lightbulb"></i> Message clé</h2>
+        <p style="text-align:center;font-style:italic">Nous n’imposons aucune refonte : nous ajoutons des <span class="highlight">automatisations simples</span> pour trier, classer, comparer, relancer et résumer. L’objectif : <b>moins de tâches répétitives</b>, <b>plus de relation et de pilotage</b>.</p>
+      </section>
+    </div>
+
+    <!-- BENEFICES -->
+    <div id="benefices" class="tab-pane">
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-rocket"></i> Avant / Après automatisation</h2>
+        <div class="before-after-grid">
+          <div class="before">
+            <h3>Situation actuelle</h3>
+            <ul class="problem-list">
+              <li>Boîtes mails débordées, infos éparpillées</li>
+              <li>Relances charges/factures manuelles et tardives</li>
+              <li>Devis peu comparables, risques de surcoûts</li>
+              <li>Archivage hétérogène, recherche difficile</li>
+              <li>Veille réglementaire ponctuelle et non tracée</li>
+              <li>Suivi des travaux artisanal, peu partagé</li>
+            </ul>
+          </div>
+          <div class="after">
+            <h3>Avec les automatisations</h3>
+            <div class="after-grid">
+              <div class="benefit-item">
+                <div class="benefit-icon"><i class="fas fa-inbox"></i></div>
+                <div class="benefit-content"><b>Inbox intelligente</b><br/>Tri, affectation, <em>résumés</em> et classement auto</div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="benefit-content"><b>Relances automatiques</b><br/>Échéanciers, paiements, lettres types</div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon"><i class="fas fa-scale-balanced"></i></div>
+                <div class="benefit-content"><b>Comparateur de devis</b><br/>Écarts détectés, décision éclairée</div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon"><i class="fas fa-folder-tree"></i></div>
+                <div class="benefit-content"><b>Archivage intelligent</b><br/>Indexation, recherche instantanée</div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon"><i class="fas fa-gavel"></i></div>
+                <div class="benefit-content"><b>Veille réglementaire</b><br/>Scraping + synthèse + alertes</div>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon"><i class="fas fa-screwdriver-wrench"></i></div>
+                <div class="benefit-content"><b>Suivi des travaux</b><br/>Jalons, photos, retards, notifications</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- SOLUTIONS / OUTILS -->
+    <div id="solutions" class="tab-pane">
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-toolbox"></i> 18 outils concrets pour syndics</h2>
+        <p>Chaque carte décrit le problème visé, l’automatisation, l’avant/après et le bénéfice principal.</p>
+
+        <div class="tools-grid">
+          <!-- 1 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-magnifying-glass"></i> Scraping multi-sources (artisans, immobilier, normes)</h3>
+            <div class="tool-description">
+              <p>Collecte automatique : <b>artisans</b> (coordonnées, avis, délais), <b>données immobilières locales</b> (€/m², annonces), <b>réglementaire</b> (DPE, aides, obligations). Fréquences programmables, respect <em>robots.txt</em> et CGU des sites.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> 4–6 h de recherches dispersées</div>
+                <div class="tool-after"><b>APRÈS :</b> base unifiée rafraîchie automatiquement</div>
+              </div>
+              <div class="note">Utilisations : comparatifs devis, argumentaires en AG, annuaire d’artisans qualifié.</div>
+            </div>
+            <span class="badge">⏱ Gain : 95%</span>
+          </div>
+
+          <!-- 2 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-envelope-open-text"></i> Inbox intelligente & routage par immeuble</h3>
+            <div class="tool-description">
+              <p>Tri automatique des e-mails par <b>immeuble/dossier</b>, détection d’intention (charges, travaux, sinistre), génération de tâches, <b>résumés</b> de fils longs, pièces jointes classées au bon endroit.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> 200 e-mails/j, informations perdues</div>
+                <div class="tool-after"><b>APRÈS :</b> tri + résumé + suivi consolidé</div>
+              </div>
+            </div>
+            <span class="badge">📩 Inbox zéro</span>
+          </div>
+
+          <!-- 3 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-folder-tree"></i> Archivage intelligent & recherche instantanée</h3>
+            <div class="tool-description">
+              <p>Indexation des PDF/Word, <b>nommage normalisé</b>, classification auto (AG, factures, devis, contrats, interventions), recherche par <b>immeuble/lot/date/nature</b>.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> dossiers hétérogènes, pièces introuvables</div>
+                <div class="tool-after"><b>APRÈS :</b> tout retrouvé en 2 clics</div>
+              </div>
+            </div>
+            <span class="badge">🗂 +Fiabilité</span>
+          </div>
+
+          <!-- 4 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-file-invoice-dollar"></i> Relances charges & factures automatisées</h3>
+            <div class="tool-description">
+              <p>Échéanciers, rappels e-mail/SMS, <b>lettres types</b> (niveau 1, 2, LRAR), suivi des paiements/promesses, export comptable.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> relances manuelles et tardives</div>
+                <div class="tool-after"><b>APRÈS :</b> rappels cadencés + journal d’actions</div>
+              </div>
+            </div>
+            <span class="badge">💶 -80% impayés</span>
+          </div>
+
+          <!-- 5 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-screwdriver-wrench"></i> Suivi des travaux & interventions</h3>
+            <div class="tool-description">
+              <p>Planning partagé par jalons, <b>photos</b> d’avancement, notifications de retard, check réception, génération de PV final.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> échanges épars, délais flous</div>
+                <div class="tool-after"><b>APRÈS :</b> visibilité et traçabilité complètes</div>
+              </div>
+            </div>
+            <span class="badge">🏗 +Prévisibilité</span>
+          </div>
+
+          <!-- 6 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-scale-balanced"></i> Comparateur intelligent de devis</h3>
+            <div class="tool-description">
+              <p>Extraction des lignes, <b>comparaison poste à poste</b>, alerte prix atypiques, synthèse visuelle AG, <b>recommandation</b> argumentée.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> lecture manuelle fastidieuse</div>
+                <div class="tool-after"><b>APRÈS :</b> décision rapide et traçable</div>
+              </div>
+            </div>
+            <span class="badge">📊 Décisions + rapides</span>
+          </div>
+
+          <!-- 7 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-people-roof"></i> Assistant AG (convocations, votes, PV auto)</h3>
+            <div class="tool-description">
+              <p>Convocations auto (ODJ dynamique), gestion des pouvoirs, <b>vote électronique</b>, PV auto avec décisions et annexes.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> préparation lourde et manuelle</div>
+                <div class="tool-after"><b>APRÈS :</b> AG cadrée, dossiers prêts</div>
+              </div>
+            </div>
+            <span class="badge">🗳 +Efficacité</span>
+          </div>
+
+          <!-- 8 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-scale-unbalanced"></i> Veille réglementaire & juridique</h3>
+            <div class="tool-description">
+              <p>Scraping sites officiels (copropriété, urbanisme, DPE, aides), <b>synthèses</b> compréhensibles, <b>alertes</b> en cas d’impact direct.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> veille ponctuelle, non tracée</div>
+                <div class="tool-after"><b>APRÈS :</b> bulletin périodique + référentiel</div>
+              </div>
+            </div>
+            <span class="badge">🛡 Conformité</span>
+          </div>
+
+          <!-- 9 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-file-signature"></i> Résumés & synthèses de documents</h3>
+            <div class="tool-description">
+              <p>Lecture de PV, contrats, expertises ; <b>résumé exécutif</b>, <b>risques</b>, <b>points d’attention</b>, to-do générée.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> lecture intégrale chronophage</div>
+                <div class="tool-after"><b>APRÈS :</b> 1 page claire + actions</div>
+              </div>
+            </div>
+            <span class="badge">🧠 +Clarté</span>
+          </div>
+
+          <!-- 10 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-chart-line"></i> Tableau de bord financier</h3>
+            <div class="tool-description">
+              <p>Encaissements/dépenses, <b>impayés</b>, alertes dépassements, prévisionnel, <b>PDF</b> pour conseil syndical/AG.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> consolidations manuelles</div>
+                <div class="tool-after"><b>APRÈS :</b> visibilité temps réel</div>
+              </div>
+            </div>
+            <span class="badge">💼 Pilotage</span>
+          </div>
+
+          <!-- 11 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-bell"></i> Centre d’alertes & priorisation</h3>
+            <div class="tool-description">
+              <p>Regroupe incidents, retards, échéances (assurances, contrôles), <b>priorise</b> et <b>assigne</b> automatiquement.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> urgences découvertes tard</div>
+                <div class="tool-after"><b>APRÈS :</b> prévention + action rapide</div>
+              </div>
+            </div>
+            <span class="badge">🚨 Réactivité</span>
+          </div>
+
+          <!-- 12 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-robot"></i> Assistant copropriétaires (FAQ & tickets)</h3>
+            <div class="tool-description">
+              <p>Réponses automatiques aux questions courantes, ouverture de ticket si besoin, lien direct vers le bon document.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> appels/e-mails répétés</div>
+                <div class="tool-after"><b>APRÈS :</b> self-service + traçabilité</div>
+              </div>
+            </div>
+            <span class="badge">🤖 -70% sollicitations</span>
+          </div>
+
+          <!-- 13 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-clipboard-check"></i> CR de réunion automatiques & anonymisation</h3>
+            <div class="tool-description">
+              <p>Génère des comptes rendus structurés à partir de notes/audio, <b>anonymise</b> (RGPD), diffuse aux bons destinataires.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> rédaction lente et inégale</div>
+                <div class="tool-after"><b>APRÈS :</b> CR propre + checklist</div>
+              </div>
+            </div>
+            <span class="badge">📝 +Rigueur</span>
+          </div>
+
+          <!-- 14 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-cloud-arrow-up"></i> Portail de dépôt (artisans & copropriétaires)</h3>
+            <div class="tool-description">
+              <p>Formulaire sécurisé pour <b>déposer</b> factures, photos, devis, attestations ; <b>classement auto</b> + notification gestionnaire.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> pièces envoyées par e-mail puis perdues</div>
+                <div class="tool-after"><b>APRÈS :</b> dossiers complets et ordonnés</div>
+              </div>
+            </div>
+            <span class="badge">📎 +Complétude</span>
+          </div>
+
+          <!-- 15 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-helmet-safety"></i> Registre prestataires & conformité</h3>
+            <div class="tool-description">
+              <p>Annuaire artisans : <b>assurances</b>, KBIS, habilitations, <b>notes qualité</b> ; relances d’expiration automatiques, évaluation post-intervention.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> infos prestataires dispersées</div>
+                <div class="tool-after"><b>APRÈS :</b> base qualifiée et à jour</div>
+              </div>
+            </div>
+            <span class="badge">🧩 +Qualité réseau</span>
+          </div>
+
+          <!-- 16 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-house-chimney-crack"></i> Sinistres & assurances (workflow guidé)</h3>
+            <div class="tool-description">
+              <p>Déclaration guidée (pièces requises), assignation expert/artisan, suivi indemnisation, journal des échanges, relances automatiques.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> délais, oublis de pièces</div>
+                <div class="tool-after"><b>APRÈS :</b> parcours standard + délais réduits</div>
+              </div>
+            </div>
+            <span class="badge">🛡 +Indemnisation</span>
+          </div>
+
+          <!-- 17 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-file-pen"></i> Générateur de modèles (courriers, contrats, convocations)</h3>
+            <div class="tool-description">
+              <p>Modèles dynamiques (variables immeuble/lot/date), export PDF/Docx, prêt pour signature électronique.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> copier/coller, erreurs</div>
+                <div class="tool-after"><b>APRÈS :</b> documents corrects du 1er coup</div>
+              </div>
+            </div>
+            <span class="badge">📄 Zéro coquille</span>
+          </div>
+
+          <!-- 18 -->
+          <div class="tool-card">
+            <h3><i class="fas fa-newspaper"></i> Revue de presse & tendances locales</h3>
+            <div class="tool-description">
+              <p>Digest hebdo (marché, énergie, copro), mise en perspective pour conseils syndicaux/AG ; partage en 1 clic.</p>
+              <div class="tool-before-after">
+                <div class="tool-before"><b>AVANT :</b> informations éparses</div>
+                <div class="tool-after"><b>APRÈS :</b> veille utile, prête à diffuser</div>
+              </div>
+            </div>
+            <span class="badge">📰 +Vision</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- FEUILLE DE ROUTE -->
+    <div id="feuille-route" class="tab-pane">
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-road"></i> Feuille de route simplifiée</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-phase"><i class="fas fa-rocket"></i> Étape 1 — Premier outil</div>
+            <p>Déploiement rapide d’un flux prioritaire (ex. tri e-mails ou relances). 100% utilisable, sans jargon.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-phase"><i class="fas fa-users"></i> Étape 2 — Formation express</div>
+            <p>15–30 minutes pour les gestionnaires. Mini-guides intégrés (captures, vidéos courtes).</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-phase"><i class="fas fa-chart-line"></i> Étape 3 — Extension progressive</div>
+            <p>Ajout d’automatisations selon les tâches <b>manuelles, chronophages et récurrentes</b> observées (AG, travaux, archivage, veille…).</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- GOUVERNANCE & FAQ -->
+    <div id="gouvernance" class="tab-pane">
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-lock"></i> Gouvernance & sécurité (PME)</h2>
+        <ul class="benefit-list">
+          <li><b>Données hébergées en France</b> (local ou cloud 🇫🇷), conformité RGPD</li>
+          <li><b>Sécurisation PC</b> : antivirus à jour, mots de passe forts, comptes séparés</li>
+          <li><b>Outils légers</b> : installation simple, pas de serveur lourd</li>
+          <li><b>Confidentialité</b> : rien d’exposé à l’étranger, accès limités</li>
+          <li><b>Sauvegardes</b> planifiées et journaux d’accès (piste d’audit simple)</li>
+        </ul>
+      </section>
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-comments"></i> FAQ rapide</h2>
+        <div class="faq-columns">
+          <div>
+            <div class="faq-item">
+              <div class="faq-question">“On a déjà un logiciel de syndic.”</div>
+              <div>Parfait : ces automatisations <b>complètent</b> ce que le logiciel ne couvre pas (tri e-mails, comparatifs, résumés, veille…).</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">“Est-ce compliqué à utiliser ?”</div>
+              <div>Non : interfaces simples, <b>guides courts</b>, raccourcis clairs. Objectif : limiter les clics.</div>
+            </div>
+          </div>
+          <div>
+            <div class="faq-item">
+              <div class="faq-question">“Et la sécurité ?”</div>
+              <div>Hébergement <b>en France</b>, accès protégés, sauvegardes, <b>aucune donnée</b> exposée hors UE.</div>
+            </div>
+            <div class="faq-item">
+              <div class="faq-question">“Quand voit-on des résultats ?”</div>
+              <div>En général <b>en 2 semaines</b> : tri e-mails + relances + 1 tableau de bord suffisent à montrer l’impact.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- PERSONNALISATION -->
+    <div id="personnalisation" class="tab-pane">
+      <section class="section">
+        <h2 class="section-title"><i class="fas fa-drafting-compass"></i> Personnalisation pour équipes 2–3 personnes</h2>
+        <p>Notre règle est simple : <b>si une tâche est manuelle, chronophage et récurrente</b>, elle doit être candidate à l’automatisation.</p>
+        <div class="faq-columns">
+          <div>
+            <h3 style="font-size:1.1rem;color:var(--primary);margin-bottom:.5rem"><i class="fas fa-list-check"></i> Diagnostic express</h3>
+            <ul class="benefit-list">
+              <li>Lister les tâches répétées chaque semaine (e-mails, factures, relances, archivage)</li>
+              <li>Mesurer le temps passé et l’irritant (erreurs, redites, pertes d’infos)</li>
+              <li>Prioriser 1–2 flux à <b>fort gain</b> et faible risque</li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="font-size:1.1rem;color:var(--primary);margin-bottom:.5rem"><i class="fas fa-sliders"></i> Mise en œuvre</h3>
+            <ul class="benefit-list">
+              <li>Adapter l’outil à vos formats (Excel, PDF, e-mails)</li>
+              <li>Paramétrer vos règles simples (noms d’immeubles, labels, dossiers)</li>
+              <li>Former en 15–30 min ; <b>puis étendre</b> progressivement</li>
+            </ul>
+          </div>
+        </div>
+        <p class="note">Objectif : bâtir un petit <b>catalogue interne</b> d’automatisations utiles, maintenables et documentées.</p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabs = document.querySelectorAll('.tab-button');
+      const panes = document.querySelectorAll('.tab-pane');
+
+      tabs.forEach(tab=>{
+        tab.addEventListener('click',()=>{
+          tabs.forEach(t=>t.classList.remove('active'));
+          panes.forEach(p=>p.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById(tab.dataset.tab).classList.add('active');
+          animateSections();
+        });
+      });
+
+      function animateSections(){
+        const sections = document.querySelectorAll('.tab-pane.active .section');
+        sections.forEach((section, idx)=>{
+          section.classList.remove('visible');
+          const obs = new IntersectionObserver((entries)=>{
+            entries.forEach(entry=>{
+              if(entry.isIntersecting){
+                setTimeout(()=>entry.target.classList.add('visible'), idx*100);
+                obs.unobserve(entry.target);
+              }
+            });
+          },{threshold:.1});
+          obs.observe(section);
+        });
+      }
+      animateSections();
+    });
+  </script>
+</body>
+</html>
