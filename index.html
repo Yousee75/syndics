@@ -1,615 +1,2161 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Automatisation pour Syndics de Copropriété | Rapport Stratégique</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport 2025 | Transformation Digitale des Syndics</title>
+    
+    <!-- Libraries tendance 2025 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  <!-- Fonts & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+        :root {
+            /* Palette moderne fond blanc */
+            --primary: #5E3BEE;
+            --secondary: #FF6B6B;
+            --accent: #4ECDC4;
+            --gold: #FFD700;
+            --dark: #1A1A2E;
+            --text: #2D3748;
+            --text-light: #718096;
+            --white: #FFFFFF;
+            --bg-light: #F7FAFC;
+            --bg-card: #FFFFFF;
+            --shadow-soft: rgba(0, 0, 0, 0.05);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-warm: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
 
-  <!-- Optional GSAP (kept for smoothness) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--white);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
 
-  <style>
-    :root{
-      --primary:#1a5276;
-      --secondary:#2e86c1;
-      --accent:#e74c3c;
-      --success:#27ae60;
-      --warning:#f39c12;
-      --info:#3498db;
-      --light:#ecf0f1;
-      --dark:#2c3e50;
-      --text:#2c3e50;
-      --bg-gradient:linear-gradient(135deg,#1a5276 0%,#2e86c1 100%);
-      --card-shadow:0 10px 30px rgba(0,0,0,.08);
-      --hover-shadow:0 15px 35px rgba(0,0,0,.12);
-      --section-spacing:3rem;
-    }
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{
-      font-family:'Poppins',sans-serif;
-      color:var(--text);
-      background:linear-gradient(135deg,#f5f7fa 0%,#e3e8f0 100%);
-      line-height:1.7;min-height:100vh
-    }
-    .container{max-width:1200px;margin:0 auto;padding:2rem}
+        /* Loader initial */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
 
-    /* Header */
-    .main-header{
-      background:var(--bg-gradient);color:#fff;padding:4rem 2rem;border-radius:20px;
-      margin-bottom:var(--section-spacing);box-shadow:var(--card-shadow);text-align:center;position:relative;overflow:hidden
-    }
-    .main-header::before{
-      content:'';position:absolute;inset:0;
-      background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.08)"/></svg>') center/cover no-repeat
-    }
-    .main-header h1{font-size:2.8rem;font-weight:700;margin-bottom:1rem;position:relative}
-    .subtitle{position:relative;max-width:900px;margin:0 auto 1.25rem;opacity:.95}
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
 
-    /* Tabs */
-    .tabs-nav{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-bottom:var(--section-spacing)}
-    .tab-button{
-      background:#fff;border:none;border-radius:50px;padding:1rem 1.25rem;color:var(--primary);
-      font-weight:600;cursor:pointer;box-shadow:var(--card-shadow);display:flex;gap:.6rem;align-items:center;
-      transition:transform .25s ease, box-shadow .3s ease
-    }
-    .tab-button:hover{transform:translateY(-3px);box-shadow:var(--hover-shadow)}
-    .tab-button.active{background:var(--primary);color:#fff}
-    .tab-pane{display:none;animation:fadeInUp .6s ease-out}
-    .tab-pane.active{display:block}
+        .loader-inner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--bg-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
 
-    /* Sections */
-    .section{
-      background:#fff;border-radius:20px;padding:2rem;box-shadow:var(--card-shadow);
-      margin-bottom:var(--section-spacing);opacity:0;transform:translateY(30px)
-    }
-    .section.visible{opacity:1;transform:translateY(0)}
-    .section-title{
-      font-size:1.8rem;color:var(--primary);display:flex;align-items:center;gap:.75rem;
-      padding-bottom:1rem;border-bottom:3px solid var(--light);margin-bottom:1.5rem
-    }
-    .section-title i{color:var(--secondary)}
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
 
-    /* Lists */
-    .problem-list,.benefit-list{list-style:none}
-    .problem-list li,.benefit-list li{
-      border-bottom:1px solid #eee;padding:.8rem 0
-    }
-    .problem-list li::marker,.benefit-list li::marker{content:''}
-    .problem-list li:before{content:"❌";color:var(--accent);margin-right:.5rem}
-    .benefit-list li:before{content:"✨";color:var(--success);margin-right:.5rem}
+        /* Navigation flottante moderne */
+        nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 10px 20px;
+            box-shadow: 0 10px 40px var(--shadow-soft);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
 
-    /* KPI */
-    .kpi-section{
-      display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:.5rem
-    }
-    .kpi-card{
-      background:#fff;border-radius:14px;padding:1.25rem;text-align:center;border-top:4px solid var(--info);
-      box-shadow:var(--card-shadow);transition:transform .25s ease
-    }
-    .kpi-card:hover{transform:translateY(-4px)}
-    .kpi-number{font-size:2rem;font-weight:700;color:var(--primary)}
-    .kpi-label{font-size:.95rem;color:#555}
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 10px 60px var(--shadow-medium);
+        }
 
-    /* Before/After */
-    .before-after-grid{display:grid;gap:1.5rem;grid-template-columns:1fr 1fr}
-    .before,.after{padding:1.25rem;border-radius:14px}
-    .before{background:linear-gradient(135deg,#ffeaea,#ffd7d7);border-left:5px solid var(--accent)}
-    .after{background:linear-gradient(135deg,#e8f7ef,#d8f0e3);border-left:5px solid var(--success)}
-    .after-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-    .after-grid .benefit-item{
-      display:flex;gap:.75rem;align-items:flex-start;background:#fff;border-radius:10px;padding:.85rem;
-      box-shadow:0 6px 16px rgba(0,0,0,.06);border-left:4px solid var(--secondary)
-    }
-    .benefit-icon{font-size:1.1rem;color:var(--secondary);min-width:22px;text-align:center;margin-top:.1rem}
-    .benefit-content b{color:var(--dark)}
+        .nav-items {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
 
-    /* Tools */
-    .tools-grid{display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));margin-top:.5rem}
-    .tool-card{
-      background:linear-gradient(135deg,#ffffff 0%,#f8f9fb 100%);border-radius:16px;padding:1.5rem;border-left:5px solid var(--secondary);
-      box-shadow:var(--card-shadow);display:flex;flex-direction:column;gap:.75rem;transition:transform .25s ease, box-shadow .3s ease
-    }
-    .tool-card:hover{transform:translateY(-8px);box-shadow:var(--hover-shadow)}
-    .tool-card h3{font-size:1.15rem;color:var(--primary);display:flex;gap:.6rem;align-items:center;margin-bottom:.25rem}
-    .tool-description{font-size:.98rem;color:#333}
-    .tool-before-after{display:grid;gap:.5rem;margin-top:.5rem}
-    .tool-before,.tool-after{padding:.6rem;border-radius:8px;border-left:3px solid}
-    .tool-before{background:#ffeaea;border-left-color:var(--accent)}
-    .tool-after{background:#e8f7ef;border-left-color:var(--success)}
-    .badge{
-      margin-top:auto;display:inline-block;background:var(--info);color:#fff;font-weight:700;border-radius:999px;
-      padding:.35rem .8rem;font-size:.85rem
-    }
-    .note{font-size:.85rem;color:#666;margin-top:.25rem}
+        .nav-item {
+            position: relative;
+            padding: 10px 20px;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
 
-    /* Timeline (simplified) */
-    .timeline{border-left:3px solid var(--secondary);padding-left:1rem}
-    .timeline-item{margin:1rem 0}
-    .timeline-phase{font-weight:700;color:var(--primary);margin-bottom:.35rem}
+        .nav-item:hover {
+            color: var(--primary);
+            background: var(--bg-light);
+        }
 
-    /* FAQ */
-    .faq-columns{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
-    .faq-item{border-bottom:1px dashed #cfd8dc;padding-bottom:.9rem}
-    .faq-question{font-weight:700;color:var(--primary);margin-bottom:.25rem}
+        .nav-item.active {
+            color: var(--white);
+            background: var(--gradient-1);
+        }
 
-    .highlight{background:linear-gradient(120deg,#fff9c4 0%,#f3e5f5 100%);padding:.15rem .45rem;border-radius:6px}
-    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        /* Hero Section avec particules */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--white) 100%);
+            overflow: hidden;
+        }
 
-    /* Responsive */
-    @media (max-width: 900px){
-      .before-after-grid{grid-template-columns:1fr}
-      .after-grid{grid-template-columns:1fr}
-    }
-    @media (max-width: 600px){
-      .tab-button{width:100%;justify-content:center}
-      .kpi-number{font-size:1.6rem}
-    }
-  </style>
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 1200px;
+            padding: 2rem;
+            z-index: 1;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            background: var(--gradient-1);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            color: var(--text-light);
+            margin-bottom: 3rem;
+        }
+
+        #typed-text {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .cta-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 10px 30px rgba(94, 59, 238, 0.3);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(94, 59, 238, 0.4);
+        }
+
+        .cta-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .cta-secondary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Stats Section avec animation de comptage */
+        .stats-section {
+            padding: 100px 20px;
+            background: var(--bg-light);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px var(--shadow-soft);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px var(--shadow-medium);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            color: var(--text-light);
+        }
+
+        /* Section principale du rapport */
+        .report-section {
+            padding: 100px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            background: var(--gradient-2);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Cards avec effet glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px var(--shadow-soft);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+            opacity: 0;
+        }
+
+        .glass-card:hover::before {
+            animation: shimmer 0.5s ease;
+            opacity: 1;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px var(--shadow-medium);
+        }
+
+        /* Services grid moderne */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px var(--shadow-soft);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 0;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px var(--shadow-medium);
+        }
+
+        .service-card:hover::after {
+            opacity: 0.05;
+        }
+
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-description {
+            color: var(--text-light);
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-features {
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-features li {
+            list-style: none;
+            padding: 8px 0;
+            color: var(--text);
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Timeline moderne */
+        .timeline {
+            position: relative;
+            padding: 60px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--gradient-1);
+            top: 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow-soft);
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 30px;
+            height: 30px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid white;
+            box-shadow: 0 5px 15px var(--shadow-medium);
+        }
+
+        .timeline-date {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.2rem;
+            background: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px var(--shadow-soft);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-date {
+            left: 55%;
+        }
+
+        .timeline-item:nth-child(even) .timeline-date {
+            right: 55%;
+        }
+
+        /* Graphiques interactifs */
+        .chart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--shadow-soft);
+            margin: 30px 0;
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        /* Call to Action final */
+        .final-cta {
+            padding: 120px 20px;
+            background: var(--gradient-1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .final-cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: white;
+            margin-bottom: 30px;
+            font-weight: 900;
+        }
+
+        .final-cta p {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+        }
+
+        .final-cta-button {
+            padding: 20px 50px;
+            font-size: 1.3rem;
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .final-cta-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer moderne */
+        footer {
+            padding: 80px 20px 30px;
+            background: var(--dark);
+            color: white;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-column p,
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            line-height: 2;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Animations au scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Progress bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--bg-light);
+            z-index: 10000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient-1);
+            width: 0;
+            transition: width 0.1s ease;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .nav-items {
+                gap: 15px;
+            }
+            
+            .nav-item {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                margin-left: 50px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-dot {
+                left: 30px;
+            }
+
+            .timeline-date {
+                position: static;
+                margin-bottom: 20px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        /* Effet de survol pour les liens */
+        a {
+            position: relative;
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: var(--secondary);
+        }
+
+        /* Bouton scroll to top */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px var(--shadow-medium);
+        }
+
+        .scroll-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow-medium);
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Header -->
-    <header class="main-header">
-      <h1><i class="fas fa-city"></i> Automatisation pour Syndics de Copropriété</h1>
-      <p class="subtitle">Moins de paperasse, plus d’efficacité. Des outils simples qui s’ajoutent à vos habitudes pour gagner du temps sur les <span class="highlight">tâches manuelles et répétitives</span>.</p>
-    </header>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-inner"></div>
+    </div>
 
-    <!-- Tabs -->
-    <nav class="tabs-nav">
-      <button class="tab-button active" data-tab="resume"><i class="fas fa-file-signature"></i> Résumé</button>
-      <button class="tab-button" data-tab="benefices"><i class="fas fa-rocket"></i> Bénéfices</button>
-      <button class="tab-button" data-tab="solutions"><i class="fas fa-toolbox"></i> Outils</button>
-      <button class="tab-button" data-tab="feuille-route"><i class="fas fa-road"></i> Feuille de Route</button>
-      <button class="tab-button" data-tab="gouvernance"><i class="fas fa-lock"></i> Gouvernance & FAQ</button>
-      <button class="tab-button" data-tab="personnalisation"><i class="fas fa-drafting-compass"></i> Personnalisation</button>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-items">
+            <a href="#home" class="nav-item active">Accueil</a>
+            <a href="#problem" class="nav-item">Problématique</a>
+            <a href="#services" class="nav-item">Services</a>
+            <a href="#process" class="nav-item">Processus</a>
+            <a href="#results" class="nav-item">Résultats</a>
+            <a href="#contact" class="nav-item">Contact</a>
+        </div>
     </nav>
 
-    <!-- RESUME -->
-    <div id="resume" class="tab-pane active">
-      <section class="section">
-        <h2 class="section-title"><i class="fas fa-file-signature"></i> Résumé exécutif</h2>
-        <p>Les petits cabinets (2–3 personnes) jonglent au quotidien avec des e-mails, des factures, des devis, des urgences techniques et des obligations réglementaires. Nous proposons des <b>automatisations ciblées</b> qui s’installent simplement, <b>sans remplacer vos outils</b>, pour récupérer du temps et fiabiliser vos dossiers.</p>
-      </section>
-
-      <section class="section">
-        <h2 class="section-title"><i class="fas fa-gauge-high"></i> KPI clés attendus</h2>
-        <div class="kpi-section">
-          <div class="kpi-card"><div class="kpi-number">+40%</div><div class="kpi-label">Temps gagné (administratif)</div></div>
-          <div class="kpi-card"><div class="kpi-number">-60%</div><div class="kpi-label">Erreurs documentaires</div></div>
-          <div class="kpi-card"><div class="kpi-number">-70%</div><div class="kpi-label">Appels/rappels répétitifs</div></div>
-          <div class="kpi-card"><div class="kpi-number">≤ 2 sem.</div><div class="kpi-label">1er outil opérationnel</div></div>
-          <div class="kpi-card"><div class="kpi-number">+20 pts</div><div class="kpi-label">Satisfaction copropriétaires</div></div>
-          <div class="kpi-card"><div class="kpi-number">-50%</div><div class="kpi-label">Délai traitement tickets</div></div>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div id="particles-js"></div>
+        <div class="hero-content reveal">
+            <div class="hero-badge">🔥 15 min de consultation gratuite</div>
+            <h1 class="hero-title">La Transformation par l'IA<br>pour les Syndics Ambitieux</h1>
+            <p class="hero-subtitle">
+                <span id="typed-text"></span>
+            </p>
+            <div class="cta-container">
+                <a href="#problem" class="cta-button cta-primary">Découvrir le rapport</a>
+                <a href="#contact" class="cta-button cta-secondary">Obtenir une consultation</a>
+            </div>
         </div>
-      </section>
+    </section>
 
-      <section class="section">
-        <h2 class="section-title"><i class="fas fa-lightbulb"></i> Message clé</h2>
-        <p style="text-align:center;font-style:italic">Nous n’imposons aucune refonte : nous ajoutons des <span class="highlight">automatisations simples</span> pour trier, classer, comparer, relancer et résumer. L’objectif : <b>moins de tâches répétitives</b>, <b>plus de relation et de pilotage</b>.</p>
-      </section>
-    </div>
-
-    <!-- BENEFICES -->
-    <div id="benefices" class="tab-pane">
-      <section class="section">
-        <h2 class="section-title"><i class="fas fa-rocket"></i> Avant / Après automatisation</h2>
-        <div class="before-after-grid">
-          <div class="before">
-            <h3>Situation actuelle</h3>
-            <ul class="problem-list">
-              <li>Boîtes mails débordées, infos éparpillées</li>
-              <li>Relances charges/factures manuelles et tardives</li>
-              <li>Devis peu comparables, risques de surcoûts</li>
-              <li>Archivage hétérogène, recherche difficile</li>
-              <li>Veille réglementaire ponctuelle et non tracée</li>
-              <li>Suivi des travaux artisanal, peu partagé</li>
-            </ul>
-          </div>
-          <div class="after">
-            <h3>Avec les automatisations</h3>
-            <div class="after-grid">
-              <div class="benefit-item">
-                <div class="benefit-icon"><i class="fas fa-inbox"></i></div>
-                <div class="benefit-content"><b>Inbox intelligente</b><br/>Tri, affectation, <em>résumés</em> et classement auto</div>
-              </div>
-              <div class="benefit-item">
-                <div class="benefit-icon"><i class="fas fa-file-invoice-dollar"></i></div>
-                <div class="benefit-content"><b>Relances automatiques</b><br/>Échéanciers, paiements, lettres types</div>
-              </div>
-              <div class="benefit-item">
-                <div class="benefit-icon"><i class="fas fa-scale-balanced"></i></div>
-                <div class="benefit-content"><b>Comparateur de devis</b><br/>Écarts détectés, décision éclairée</div>
-              </div>
-              <div class="benefit-item">
-                <div class="benefit-icon"><i class="fas fa-folder-tree"></i></div>
-                <div class="benefit-content"><b>Archivage intelligent</b><br/>Indexation, recherche instantanée</div>
-              </div>
-              <div class="benefit-item">
-                <div class="benefit-icon"><i class="fas fa-gavel"></i></div>
-                <div class="benefit-content"><b>Veille réglementaire</b><br/>Scraping + synthèse + alertes</div>
-              </div>
-              <div class="benefit-item">
-                <div class="benefit-icon"><i class="fas fa-screwdriver-wrench"></i></div>
-                <div class="benefit-content"><b>Suivi des travaux</b><br/>Jalons, photos, retards, notifications</div>
-              </div>
-            </div>
-          </div>
+   
+    <!-- Section Problématique -->
+    <section class="report-section" id="problem">
+        <div class="section-header reveal">
+            <span class="section-badge">Chapitre 1</span>
+            <h2 class="section-title">La Réalité du Secteur en 2025</h2>
+            <p class="section-subtitle">Les syndics face au défi digital : entre nécessité et complexité</p>
         </div>
-      </section>
-    </div>
 
-    <!-- SOLUTIONS / OUTILS -->
-    <div id="solutions" class="tab-pane">
-      <section class="section">
-        <h2 class="section-title"><i class="fas fa-toolbox"></i> 18 outils concrets pour syndics</h2>
-        <p>Chaque carte décrit le problème visé, l’automatisation, l’avant/après et le bénéfice principal.</p>
-
-        <div class="tools-grid">
-          <!-- 1 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-magnifying-glass"></i> Scraping multi-sources (artisans, immobilier, normes)</h3>
-            <div class="tool-description">
-              <p>Collecte automatique : <b>artisans</b> (coordonnées, avis, délais), <b>données immobilières locales</b> (€/m², annonces), <b>réglementaire</b> (DPE, aides, obligations). Fréquences programmables, respect <em>robots.txt</em> et CGU des sites.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> 4–6 h de recherches dispersées</div>
-                <div class="tool-after"><b>APRÈS :</b> base unifiée rafraîchie automatiquement</div>
-              </div>
-              <div class="note">Utilisations : comparatifs devis, argumentaires en AG, annuaire d’artisans qualifié.</div>
+        <div class="glass-card reveal">
+            <h3 style="font-size: 2rem; margin-bottom: 30px; color: var(--dark);">📊 État des Lieux : L'IA Redistribue les Cartes du Marché</h3>
+            <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px;">
+                <strong style="color: var(--primary);">Le secteur vit sa plus grande mutation depuis 20 ans.</strong> L'intelligence artificielle n'est plus une option, c'est la nouvelle norme. Les syndics qui l'adoptent aujourd'hui <span style="color: var(--accent); font-weight: 600;">gagnent 40% de productivité</span> sans embaucher. Les autres perdent des clients chaque mois.
+            </p>
+            
+            <div style="background: linear-gradient(135deg, rgba(94, 59, 238, 0.05), rgba(78, 205, 196, 0.05)); padding: 30px; border-radius: 20px; margin-bottom: 30px;">
+                <h4 style="color: var(--primary); margin-bottom: 20px; font-size: 1.5rem;">💡 Le Nouveau Paradigme</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
+                    <div>
+                        <h5 style="color: var(--secondary); margin-bottom: 10px;">🔴 Hier (2020-2024)</h5>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 8px 0;">• La digitalisation était un "plus"</li>
+                            <li style="padding: 8px 0;">• Les clients toléraient les délais</li>
+                            <li style="padding: 8px 0;">• La concurrence était locale</li>
+                            <li style="padding: 8px 0;">• L'humain faisait la différence</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 style="color: var(--accent); margin-bottom: 10px;">🟢 Aujourd'hui (2025)</h5>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 8px 0;">• L'IA est le minimum attendu</li>
+                            <li style="padding: 8px 0;">• Réponse immédiate exigée</li>
+                            <li style="padding: 8px 0;">• Syndics 100% digitaux arrivent</li>
+                            <li style="padding: 8px 0;">• L'IA + l'humain gagnent tout</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <span class="badge">⏱ Gain : 95%</span>
-          </div>
 
-          <!-- 2 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-envelope-open-text"></i> Inbox intelligente & routage par immeuble</h3>
-            <div class="tool-description">
-              <p>Tri automatique des e-mails par <b>immeuble/dossier</b>, détection d’intention (charges, travaux, sinistre), génération de tâches, <b>résumés</b> de fils longs, pièces jointes classées au bon endroit.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> 200 e-mails/j, informations perdues</div>
-                <div class="tool-after"><b>APRÈS :</b> tri + résumé + suivi consolidé</div>
-              </div>
+            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px var(--shadow-soft);">
+                <h4 style="color: var(--dark); margin-bottom: 25px;">Les Nouveaux Défis : Pourquoi l'IA Devient Vitale</h4>
+                <div style="display: grid; gap: 20px;">
+                    <div style="display: flex; align-items: center; gap: 20px; padding: 15px; background: var(--bg-light); border-radius: 15px;">
+                        <div style="font-size: 2.5rem;">🎯</div>
+                        <div>
+                            <strong style="color: var(--primary);">Acquisition sans embaucher :</strong>
+                            <p style="margin: 5px 0;">Les copropriétés veulent du 24/7. L'IA répond la nuit, les weekends, pendant vos congés. <span style="color: var(--accent); font-weight: 600;">+40% de conversion</span> sur les prospects.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 20px; padding: 15px; background: var(--bg-light); border-radius: 15px;">
+                        <div style="font-size: 2.5rem;">⚡</div>
+                        <div>
+                            <strong style="color: var(--primary);">Hyperconcurrence digitale :</strong>
+                            <p style="margin: 5px 0;">Des plateformes 100% en ligne cassent les prix avec l'IA. Votre valeur ajoutée humaine doit s'appuyer sur une efficacité IA pour rester compétitive.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 20px; padding: 15px; background: var(--bg-light); border-radius: 15px;">
+                        <div style="font-size: 2.5rem;">📈</div>
+                        <div>
+                            <strong style="color: var(--primary);">Rentabilité sous pression :</strong>
+                            <p style="margin: 5px 0;">Charges qui augmentent, honoraires bloqués. Seule solution : <span style="color: var(--secondary); font-weight: 600;">faire plus avec moins</span>. L'IA fait le travail de 2 personnes.</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 20px; padding: 15px; background: var(--bg-light); border-radius: 15px;">
+                        <div style="font-size: 2.5rem;">🏆</div>
+                        <div>
+                            <strong style="color: var(--primary);">Course à l'excellence :</strong>
+                            <p style="margin: 5px 0;">Les copropriétaires comparent. Ceux équipés d'IA offrent : réponses instantanées, documents en 1 clic, AG fluides. Les autres paraissent dépassés.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <span class="badge">📩 Inbox zéro</span>
-          </div>
-
-          <!-- 3 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-folder-tree"></i> Archivage intelligent & recherche instantanée</h3>
-            <div class="tool-description">
-              <p>Indexation des PDF/Word, <b>nommage normalisé</b>, classification auto (AG, factures, devis, contrats, interventions), recherche par <b>immeuble/lot/date/nature</b>.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> dossiers hétérogènes, pièces introuvables</div>
-                <div class="tool-after"><b>APRÈS :</b> tout retrouvé en 2 clics</div>
-              </div>
-            </div>
-            <span class="badge">🗂 +Fiabilité</span>
-          </div>
-
-          <!-- 4 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-file-invoice-dollar"></i> Relances charges & factures automatisées</h3>
-            <div class="tool-description">
-              <p>Échéanciers, rappels e-mail/SMS, <b>lettres types</b> (niveau 1, 2, LRAR), suivi des paiements/promesses, export comptable.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> relances manuelles et tardives</div>
-                <div class="tool-after"><b>APRÈS :</b> rappels cadencés + journal d’actions</div>
-              </div>
-            </div>
-            <span class="badge">💶 -80% impayés</span>
-          </div>
-
-          <!-- 5 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-screwdriver-wrench"></i> Suivi des travaux & interventions</h3>
-            <div class="tool-description">
-              <p>Planning partagé par jalons, <b>photos</b> d’avancement, notifications de retard, check réception, génération de PV final.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> échanges épars, délais flous</div>
-                <div class="tool-after"><b>APRÈS :</b> visibilité et traçabilité complètes</div>
-              </div>
-            </div>
-            <span class="badge">🏗 +Prévisibilité</span>
-          </div>
-
-          <!-- 6 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-scale-balanced"></i> Comparateur intelligent de devis</h3>
-            <div class="tool-description">
-              <p>Extraction des lignes, <b>comparaison poste à poste</b>, alerte prix atypiques, synthèse visuelle AG, <b>recommandation</b> argumentée.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> lecture manuelle fastidieuse</div>
-                <div class="tool-after"><b>APRÈS :</b> décision rapide et traçable</div>
-              </div>
-            </div>
-            <span class="badge">📊 Décisions + rapides</span>
-          </div>
-
-          <!-- 7 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-people-roof"></i> Assistant AG (convocations, votes, PV auto)</h3>
-            <div class="tool-description">
-              <p>Convocations auto (ODJ dynamique), gestion des pouvoirs, <b>vote électronique</b>, PV auto avec décisions et annexes.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> préparation lourde et manuelle</div>
-                <div class="tool-after"><b>APRÈS :</b> AG cadrée, dossiers prêts</div>
-              </div>
-            </div>
-            <span class="badge">🗳 +Efficacité</span>
-          </div>
-
-          <!-- 8 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-scale-unbalanced"></i> Veille réglementaire & juridique</h3>
-            <div class="tool-description">
-              <p>Scraping sites officiels (copropriété, urbanisme, DPE, aides), <b>synthèses</b> compréhensibles, <b>alertes</b> en cas d’impact direct.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> veille ponctuelle, non tracée</div>
-                <div class="tool-after"><b>APRÈS :</b> bulletin périodique + référentiel</div>
-              </div>
-            </div>
-            <span class="badge">🛡 Conformité</span>
-          </div>
-
-          <!-- 9 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-file-signature"></i> Résumés & synthèses de documents</h3>
-            <div class="tool-description">
-              <p>Lecture de PV, contrats, expertises ; <b>résumé exécutif</b>, <b>risques</b>, <b>points d’attention</b>, to-do générée.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> lecture intégrale chronophage</div>
-                <div class="tool-after"><b>APRÈS :</b> 1 page claire + actions</div>
-              </div>
-            </div>
-            <span class="badge">🧠 +Clarté</span>
-          </div>
-
-          <!-- 10 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-chart-line"></i> Tableau de bord financier</h3>
-            <div class="tool-description">
-              <p>Encaissements/dépenses, <b>impayés</b>, alertes dépassements, prévisionnel, <b>PDF</b> pour conseil syndical/AG.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> consolidations manuelles</div>
-                <div class="tool-after"><b>APRÈS :</b> visibilité temps réel</div>
-              </div>
-            </div>
-            <span class="badge">💼 Pilotage</span>
-          </div>
-
-          <!-- 11 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-bell"></i> Centre d’alertes & priorisation</h3>
-            <div class="tool-description">
-              <p>Regroupe incidents, retards, échéances (assurances, contrôles), <b>priorise</b> et <b>assigne</b> automatiquement.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> urgences découvertes tard</div>
-                <div class="tool-after"><b>APRÈS :</b> prévention + action rapide</div>
-              </div>
-            </div>
-            <span class="badge">🚨 Réactivité</span>
-          </div>
-
-          <!-- 12 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-robot"></i> Assistant copropriétaires (FAQ & tickets)</h3>
-            <div class="tool-description">
-              <p>Réponses automatiques aux questions courantes, ouverture de ticket si besoin, lien direct vers le bon document.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> appels/e-mails répétés</div>
-                <div class="tool-after"><b>APRÈS :</b> self-service + traçabilité</div>
-              </div>
-            </div>
-            <span class="badge">🤖 -70% sollicitations</span>
-          </div>
-
-          <!-- 13 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-clipboard-check"></i> CR de réunion automatiques & anonymisation</h3>
-            <div class="tool-description">
-              <p>Génère des comptes rendus structurés à partir de notes/audio, <b>anonymise</b> (RGPD), diffuse aux bons destinataires.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> rédaction lente et inégale</div>
-                <div class="tool-after"><b>APRÈS :</b> CR propre + checklist</div>
-              </div>
-            </div>
-            <span class="badge">📝 +Rigueur</span>
-          </div>
-
-          <!-- 14 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-cloud-arrow-up"></i> Portail de dépôt (artisans & copropriétaires)</h3>
-            <div class="tool-description">
-              <p>Formulaire sécurisé pour <b>déposer</b> factures, photos, devis, attestations ; <b>classement auto</b> + notification gestionnaire.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> pièces envoyées par e-mail puis perdues</div>
-                <div class="tool-after"><b>APRÈS :</b> dossiers complets et ordonnés</div>
-              </div>
-            </div>
-            <span class="badge">📎 +Complétude</span>
-          </div>
-
-          <!-- 15 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-helmet-safety"></i> Registre prestataires & conformité</h3>
-            <div class="tool-description">
-              <p>Annuaire artisans : <b>assurances</b>, KBIS, habilitations, <b>notes qualité</b> ; relances d’expiration automatiques, évaluation post-intervention.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> infos prestataires dispersées</div>
-                <div class="tool-after"><b>APRÈS :</b> base qualifiée et à jour</div>
-              </div>
-            </div>
-            <span class="badge">🧩 +Qualité réseau</span>
-          </div>
-
-          <!-- 16 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-house-chimney-crack"></i> Sinistres & assurances (workflow guidé)</h3>
-            <div class="tool-description">
-              <p>Déclaration guidée (pièces requises), assignation expert/artisan, suivi indemnisation, journal des échanges, relances automatiques.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> délais, oublis de pièces</div>
-                <div class="tool-after"><b>APRÈS :</b> parcours standard + délais réduits</div>
-              </div>
-            </div>
-            <span class="badge">🛡 +Indemnisation</span>
-          </div>
-
-          <!-- 17 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-file-pen"></i> Générateur de modèles (courriers, contrats, convocations)</h3>
-            <div class="tool-description">
-              <p>Modèles dynamiques (variables immeuble/lot/date), export PDF/Docx, prêt pour signature électronique.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> copier/coller, erreurs</div>
-                <div class="tool-after"><b>APRÈS :</b> documents corrects du 1er coup</div>
-              </div>
-            </div>
-            <span class="badge">📄 Zéro coquille</span>
-          </div>
-
-          <!-- 18 -->
-          <div class="tool-card">
-            <h3><i class="fas fa-newspaper"></i> Revue de presse & tendances locales</h3>
-            <div class="tool-description">
-              <p>Digest hebdo (marché, énergie, copro), mise en perspective pour conseils syndicaux/AG ; partage en 1 clic.</p>
-              <div class="tool-before-after">
-                <div class="tool-before"><b>AVANT :</b> informations éparses</div>
-                <div class="tool-after"><b>APRÈS :</b> veille utile, prête à diffuser</div>
-              </div>
-            </div>
-            <span class="badge">📰 +Vision</span>
-          </div>
         </div>
-      </section>
-    </div>
 
-    <!-- FEUILLE DE ROUTE -->
-    <div id="feuille-route" class="tab-pane">
-      <section class="section">
-        <h2 class="section-title"><i class="fas fa-road"></i> Feuille de route simplifiée</h2>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-phase"><i class="fas fa-rocket"></i> Étape 1 — Premier outil</div>
-            <p>Déploiement rapide d’un flux prioritaire (ex. tri e-mails ou relances). 100% utilisable, sans jargon.</p>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-phase"><i class="fas fa-users"></i> Étape 2 — Formation express</div>
-            <p>15–30 minutes pour les gestionnaires. Mini-guides intégrés (captures, vidéos courtes).</p>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-phase"><i class="fas fa-chart-line"></i> Étape 3 — Extension progressive</div>
-            <p>Ajout d’automatisations selon les tâches <b>manuelles, chronophages et récurrentes</b> observées (AG, travaux, archivage, veille…).</p>
-          </div>
+        <div class="glass-card reveal">
+            <h3 style="font-size: 2rem; margin-bottom: 30px; color: var(--dark);">⚠️ L'IA Révolutionne le Secteur : Adaptez-vous ou Disparaissez</h3>
+            
+            <div style="padding: 25px; background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 215, 0, 0.1)); border-radius: 20px; margin-bottom: 30px;">
+                <h4 style="color: var(--secondary); margin-bottom: 15px;">🚨 La Nouvelle Réalité du Marché</h4>
+                <p style="font-size: 1.15rem; line-height: 1.8; color: var(--text); margin-bottom: 20px;">
+                    <strong>2025 marque un tournant décisif.</strong> Les syndics qui utilisent l'IA captent <span style="color: var(--secondary); font-weight: 700;">70% des nouveaux mandats</span>. 
+                    Pendant que vous traitez manuellement vos emails, vos concurrents répondent instantanément. 
+                    Pendant que vous préparez une AG en 2 jours, ils le font en 2 heures.
+                </p>
+                <p style="font-size: 1.1rem; line-height: 1.8;">
+                    <strong style="color: var(--primary);">Le verdict des copropriétaires est sans appel :</strong> ils choisissent les syndics modernes, réactifs, disponibles 24/7. 
+                    Sans automatisation, vous perdez <span style="color: var(--secondary); font-weight: 700;">3 prospects sur 5</span> avant même le premier contact.
+                </p>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px var(--shadow-soft);">
+                <h4 class="chart-title" style="margin-bottom: 25px;">Impact de l'IA sur la Compétitivité des Syndics</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.2)); border-radius: 15px;">
+                        <div style="font-size: 2.5rem; font-weight: 900; color: var(--secondary); margin-bottom: 10px;">-28%</div>
+                        <p style="font-weight: 600;">Perte de mandats</p>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Sans IA en 2025</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(94, 59, 238, 0.1), rgba(94, 59, 238, 0.2)); border-radius: 15px;">
+                        <div style="font-size: 2.5rem; font-weight: 900; color: var(--primary); margin-bottom: 10px;">35%</div>
+                        <p style="font-weight: 600;">Surcharge de travail</p>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Pour les équipes non équipées</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(78, 205, 196, 0.2)); border-radius: 15px;">
+                        <div style="font-size: 2.5rem; font-weight: 900; color: var(--accent); margin-bottom: 10px;">x3</div>
+                        <p style="font-weight: 600;">Vitesse de traitement</p>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Avec l'automatisation IA</p>
+                    </div>
+                    <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.2)); border-radius: 15px;">
+                        <div style="font-size: 2.5rem; font-weight: 900; color: var(--gold); margin-bottom: 10px;">12%</div>
+                        <p style="font-weight: 600;">Syndics équipés</p>
+                        <p style="font-size: 0.9rem; color: var(--text-light);">Seulement aujourd'hui</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: var(--bg-light); border-radius: 15px; text-align: center;">
+                    <p style="font-size: 1.2rem; color: var(--primary); font-weight: 600;">
+                        💡 <strong>L'opportunité :</strong> Faire partie des 12% qui domineront le marché
+                    </p>
+                    <p style="color: var(--text); margin-top: 10px;">
+                        Les syndics équipés aujourd'hui captent les parts de marché de ceux qui attendent
+                    </p>
+                </div>
+            </div>
         </div>
-      </section>
-    </div>
+    </section>
 
-    <!-- GOUVERNANCE & FAQ -->
-    <div id="gouvernance" class="tab-pane">
-      <section class="section">
-        <h2 class="section-title"><i class="fas fa-lock"></i> Gouvernance & sécurité (PME)</h2>
-        <ul class="benefit-list">
-          <li><b>Données hébergées en France</b> (local ou cloud 🇫🇷), conformité RGPD</li>
-          <li><b>Sécurisation PC</b> : antivirus à jour, mots de passe forts, comptes séparés</li>
-          <li><b>Outils légers</b> : installation simple, pas de serveur lourd</li>
-          <li><b>Confidentialité</b> : rien d’exposé à l’étranger, accès limités</li>
-          <li><b>Sauvegardes</b> planifiées et journaux d’accès (piste d’audit simple)</li>
-        </ul>
-      </section>
-      <section class="section">
-        <h2 class="section-title"><i class="fas fa-comments"></i> FAQ rapide</h2>
-        <div class="faq-columns">
-          <div>
-            <div class="faq-item">
-              <div class="faq-question">“On a déjà un logiciel de syndic.”</div>
-              <div>Parfait : ces automatisations <b>complètent</b> ce que le logiciel ne couvre pas (tri e-mails, comparatifs, résumés, veille…).</div>
-            </div>
-            <div class="faq-item">
-              <div class="faq-question">“Est-ce compliqué à utiliser ?”</div>
-              <div>Non : interfaces simples, <b>guides courts</b>, raccourcis clairs. Objectif : limiter les clics.</div>
-            </div>
-          </div>
-          <div>
-            <div class="faq-item">
-              <div class="faq-question">“Et la sécurité ?”</div>
-              <div>Hébergement <b>en France</b>, accès protégés, sauvegardes, <b>aucune donnée</b> exposée hors UE.</div>
-            </div>
-            <div class="faq-item">
-              <div class="faq-question">“Quand voit-on des résultats ?”</div>
-              <div>En général <b>en 2 semaines</b> : tri e-mails + relances + 1 tableau de bord suffisent à montrer l’impact.</div>
-            </div>
-          </div>
+    <!-- Section Services -->
+    <section class="report-section" id="services">
+        <div class="section-header reveal">
+            <span class="section-badge">Chapitre 2</span>
+            <h2 class="section-title">La Solution : Automatisation & Transformation Complète</h2>
+            <p class="section-subtitle">Nous installons, configurons et gérons tous vos outils. Vous gardez le contrôle.</p>
         </div>
-      </section>
-    </div>
 
-    <!-- PERSONNALISATION -->
-    <div id="personnalisation" class="tab-pane">
-      <section class="section">
-        <h2 class="section-title"><i class="fas fa-drafting-compass"></i> Personnalisation pour équipes 2–3 personnes</h2>
-        <p>Notre règle est simple : <b>si une tâche est manuelle, chronophage et récurrente</b>, elle doit être candidate à l’automatisation.</p>
-        <div class="faq-columns">
-          <div>
-            <h3 style="font-size:1.1rem;color:var(--primary);margin-bottom:.5rem"><i class="fas fa-list-check"></i> Diagnostic express</h3>
-            <ul class="benefit-list">
-              <li>Lister les tâches répétées chaque semaine (e-mails, factures, relances, archivage)</li>
-              <li>Mesurer le temps passé et l’irritant (erreurs, redites, pertes d’infos)</li>
-              <li>Prioriser 1–2 flux à <b>fort gain</b> et faible risque</li>
-            </ul>
-          </div>
-          <div>
-            <h3 style="font-size:1.1rem;color:var(--primary);margin-bottom:.5rem"><i class="fas fa-sliders"></i> Mise en œuvre</h3>
-            <ul class="benefit-list">
-              <li>Adapter l’outil à vos formats (Excel, PDF, e-mails)</li>
-              <li>Paramétrer vos règles simples (noms d’immeubles, labels, dossiers)</li>
-              <li>Former en 15–30 min ; <b>puis étendre</b> progressivement</li>
-            </ul>
-          </div>
+        <div class="glass-card reveal" style="margin-bottom: 60px;">
+            <h3 style="font-size: 2.5rem; margin-bottom: 30px; color: var(--dark); text-align: center;">⚡ Automatisations Métier : Le Cœur de Notre Offre</h3>
+            <p style="font-size: 1.3rem; line-height: 1.8; text-align: center; color: var(--primary); font-weight: 600; margin-bottom: 40px;">
+                Plus de <span style="color: var(--secondary);">50 automatisations</span> possibles pour libérer <span style="color: var(--accent);">3 à 5 heures par jour</span>
+            </p>
         </div>
-        <p class="note">Objectif : bâtir un petit <b>catalogue interne</b> d’automatisations utiles, maintenables et documentées.</p>
-      </section>
-    </div>
-  </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const tabs = document.querySelectorAll('.tab-button');
-      const panes = document.querySelectorAll('.tab-pane');
+        <!-- Tabs pour organiser les outils -->
+        <div style="margin-bottom: 40px;">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px;">
+                <button class="tab-btn active" onclick="showTab('emails')" style="padding: 12px 25px; background: var(--gradient-1); color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.3s;">📧 Emails & Documents</button>
+                <button class="tab-btn" onclick="showTab('gestion')" style="padding: 12px 25px; background: var(--bg-light); color: var(--text); border: none; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.3s;">🏗️ Gestion & Suivi</button>
+                <button class="tab-btn" onclick="showTab('finance')" style="padding: 12px 25px; background: var(--bg-light); color: var(--text); border: none; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.3s;">💰 Finance & Reporting</button>
+                <button class="tab-btn" onclick="showTab('relation')" style="padding: 12px 25px; background: var(--bg-light); color: var(--text); border: none; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.3s;">🤝 Relation Client</button>
+                <button class="tab-btn" onclick="showTab('veille')" style="padding: 12px 25px; background: var(--bg-light); color: var(--text); border: none; border-radius: 25px; cursor: pointer; font-weight: 600; transition: all 0.3s;">🔍 Veille & Intelligence</button>
+            </div>
+            
+            <!-- Tab Content: Emails & Documents -->
+            <div id="tab-emails" class="tab-content" style="display: block;">
+                <div style="display: grid; gap: 25px;">
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--primary);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">📩</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--primary); margin-bottom: 10px; font-size: 1.3rem;">Inbox Intelligente</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Vos 200 emails quotidiens triés automatiquement par immeuble, type de demande et priorité.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Ce qu'on automatise pour vous :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Tri par immeuble et dossier</li>
+                                        <li style="padding: 3px 0;">• Détection automatique du type de demande</li>
+                                        <li style="padding: 3px 0;">• Création de tâches depuis les emails</li>
+                                        <li style="padding: 3px 0;">• Résumés des conversations longues</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Gain : Inbox zéro en 30 minutes au lieu de 3 heures</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-      tabs.forEach(tab=>{
-        tab.addEventListener('click',()=>{
-          tabs.forEach(t=>t.classList.remove('active'));
-          panes.forEach(p=>p.classList.remove('active'));
-          tab.classList.add('active');
-          document.getElementById(tab.dataset.tab).classList.add('active');
-          animateSections();
-        });
-      });
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--secondary);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">🗂️</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--secondary); margin-bottom: 10px; font-size: 1.3rem;">Archivage Intelligent</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Vos documents se rangent tout seuls ! Factures, devis, PV classés automatiquement.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Ce qu'on met en place :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Lecture automatique du contenu des PDF</li>
+                                        <li style="padding: 3px 0;">• Classement par type et immeuble</li>
+                                        <li style="padding: 3px 0;">• Nommage automatique normalisé</li>
+                                        <li style="padding: 3px 0;">• Recherche instantanée multicritères</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Résultat : Tout document retrouvé en 2 clics</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-      function animateSections(){
-        const sections = document.querySelectorAll('.tab-pane.active .section');
-        sections.forEach((section, idx)=>{
-          section.classList.remove('visible');
-          const obs = new IntersectionObserver((entries)=>{
-            entries.forEach(entry=>{
-              if(entry.isIntersecting){
-                setTimeout(()=>entry.target.classList.add('visible'), idx*100);
-                obs.unobserve(entry.target);
-              }
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--accent);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">🧠</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--accent); margin-bottom: 10px; font-size: 1.3rem;">Résumés Automatiques</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Notre IA lit pour vous les documents de 100+ pages et vous fait un résumé d'une page.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ On analyse pour vous :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Expertises techniques complexes</li>
+                                        <li style="padding: 3px 0;">• Contrats et avenants</li>
+                                        <li style="padding: 3px 0;">• Nouvelles réglementations</li>
+                                        <li style="padding: 3px 0;">• Points clés et actions à mener</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Gain : 1h de lecture → 2 minutes de synthèse</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Gestion & Suivi -->
+            <div id="tab-gestion" class="tab-content" style="display: none;">
+                <div style="display: grid; gap: 25px;">
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--primary);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">🏗️</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--primary); margin-bottom: 10px; font-size: 1.3rem;">Suivi Travaux Automatisé</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Plus de chantiers qui dérapent ! Suivi automatique de toutes les interventions.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Système complet :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Planning partagé avec jalons automatiques</li>
+                                        <li style="padding: 3px 0;">• Demande automatique de photos d'avancement</li>
+                                        <li style="padding: 3px 0;">• Alertes si retard détecté</li>
+                                        <li style="padding: 3px 0;">• PV de réception généré</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Résultat : Visibilité totale, zéro surprise</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--secondary);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">🗳️</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--secondary); margin-bottom: 10px; font-size: 1.3rem;">Assistant AG Complet</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">De la convocation au PV, tout est automatisé pour vos assemblées générales.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Process automatisé :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Convocations générées avec ordre du jour</li>
+                                        <li style="padding: 3px 0;">• Gestion des pouvoirs en ligne</li>
+                                        <li style="padding: 3px 0;">• Vote électronique sécurisé</li>
+                                        <li style="padding: 3px 0;">• PV généré automatiquement</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Gain : 1 journée complète par AG</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--accent);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">🛡️</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--accent); margin-bottom: 10px; font-size: 1.3rem;">Gestion Sinistres</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Un sinistre ? Le système gère toute la procédure avec l'assurance.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Workflow complet :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Déclaration guidée étape par étape</li>
+                                        <li style="padding: 3px 0;">• Liste des pièces générée</li>
+                                        <li style="padding: 3px 0;">• Relances automatiques assureur</li>
+                                        <li style="padding: 3px 0;">• Suivi de l'indemnisation</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Gain : Délais divisés par 2</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Finance & Reporting -->
+            <div id="tab-finance" class="tab-content" style="display: none;">
+                <div style="display: grid; gap: 25px;">
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--primary);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">💶</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--primary); margin-bottom: 10px; font-size: 1.3rem;">Relances Charges Automatiques</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Fini les relances manuelles ! Le système envoie les rappels tout seul.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Automatisations mises en place :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Rappels email à J-7 et J-1</li>
+                                        <li style="padding: 3px 0;">• SMS automatiques aux retardataires</li>
+                                        <li style="padding: 3px 0;">• Génération de lettres de relance</li>
+                                        <li style="padding: 3px 0;">• Export direct vers la comptabilité</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Résultat : -80% d'impayés en 3 mois</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--secondary);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">📊</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--secondary); margin-bottom: 10px; font-size: 1.3rem;">Comparateur de Devis</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Plus d'heures sur Excel ! Les devis sont comparés automatiquement.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Analyse automatique :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Lecture automatique des PDF</li>
+                                        <li style="padding: 3px 0;">• Comparaison ligne par ligne</li>
+                                        <li style="padding: 3px 0;">• Alerte si prix anormal</li>
+                                        <li style="padding: 3px 0;">• Tableau de synthèse pour l'AG</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Gain : Décision en 5 min vs 2 heures</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--accent);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">💼</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--accent); margin-bottom: 10px; font-size: 1.3rem;">Tableaux de Bord Temps Réel</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Vos chiffres se mettent à jour tout seuls, dashboards toujours prêts.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Indicateurs automatisés :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Encaissements/dépenses en direct</li>
+                                        <li style="padding: 3px 0;">• Taux d'impayés actualisé</li>
+                                        <li style="padding: 3px 0;">• Budget vs réalisé</li>
+                                        <li style="padding: 3px 0;">• Export PDF en 1 clic</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Résultat : Pilotage instantané</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Relation Client -->
+            <div id="tab-relation" class="tab-content" style="display: none;">
+                <div style="display: grid; gap: 25px;">
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--primary);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">🤖</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--primary); margin-bottom: 10px; font-size: 1.3rem;">Assistant Copropriétaires 24/7</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Un assistant virtuel répond aux questions courantes jour et nuit.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Services automatisés :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Réponses aux questions fréquentes</li>
+                                        <li style="padding: 3px 0;">• Envoi des documents demandés</li>
+                                        <li style="padding: 3px 0;">• Prise de RDV automatique</li>
+                                        <li style="padding: 3px 0;">• Disponible 24h/24, 7j/7</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Gain : -70% d'appels répétitifs</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--secondary);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">📎</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--secondary); margin-bottom: 10px; font-size: 1.3rem;">Portail de Dépôt Intelligent</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Artisans et copropriétaires déposent leurs documents, tout se classe automatiquement.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Workflow automatique :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Formulaire simple et guidé</li>
+                                        <li style="padding: 3px 0;">• Classement automatique par type</li>
+                                        <li style="padding: 3px 0;">• Notification du gestionnaire</li>
+                                        <li style="padding: 3px 0;">• Rappel si pièces manquantes</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Résultat : Dossiers toujours complets</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--accent);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">📄</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--accent); margin-bottom: 10px; font-size: 1.3rem;">Générateur de Documents</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Plus de copier-coller ! Les modèles se remplissent tout seuls.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Documents automatisés :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Courriers types personnalisés</li>
+                                        <li style="padding: 3px 0;">• Contrats pré-remplis</li>
+                                        <li style="padding: 3px 0;">• Convocations automatiques</li>
+                                        <li style="padding: 3px 0;">• Signature électronique intégrée</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Résultat : Documents parfaits du 1er coup</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Veille & Intelligence -->
+            <div id="tab-veille" class="tab-content" style="display: none;">
+                <div style="display: grid; gap: 25px;">
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--primary);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">🔍</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--primary); margin-bottom: 10px; font-size: 1.3rem;">Collecte Multi-Sources</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Toutes les infos du web collectées automatiquement pour vous.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Données collectées :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Base artisans avec avis et délais</li>
+                                        <li style="padding: 3px 0;">• Prix immobilier du quartier</li>
+                                        <li style="padding: 3px 0;">• Nouvelles réglementations</li>
+                                        <li style="padding: 3px 0;">• Aides et subventions disponibles</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Gain : 4-6h de recherches économisées</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--secondary);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">📰</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--secondary); margin-bottom: 10px; font-size: 1.3rem;">Veille Automatique</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Restez informé sans effort sur tout ce qui vous concerne.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Surveillance continue :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Nouvelles lois copropriété</li>
+                                        <li style="padding: 3px 0;">• Prix immobilier local</li>
+                                        <li style="padding: 3px 0;">• Actualités du quartier</li>
+                                        <li style="padding: 3px 0;">• Bulletin hebdomadaire</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Gain : Toujours à jour sans effort</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="automation-card" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft); border-left: 4px solid var(--accent);">
+                        <div style="display: flex; align-items: start; gap: 20px;">
+                            <div style="font-size: 2.5rem;">🚨</div>
+                            <div style="flex: 1;">
+                                <h4 style="color: var(--accent); margin-bottom: 10px; font-size: 1.3rem;">Centre d'Alertes</h4>
+                                <p style="color: var(--text-light); margin-bottom: 15px;">Plus rien ne vous échappe ! Alertes sur tout ce qui nécessite votre attention.</p>
+                                <div style="background: var(--bg-light); padding: 15px; border-radius: 10px;">
+                                    <p style="font-weight: 600; color: var(--dark); margin-bottom: 8px;">✓ Monitoring intelligent :</p>
+                                    <ul style="list-style: none; padding: 0; margin: 0;">
+                                        <li style="padding: 3px 0;">• Échéances assurances/contrôles</li>
+                                        <li style="padding: 3px 0;">• Incidents remontés en priorité</li>
+                                        <li style="padding: 3px 0;">• Retards de paiement</li>
+                                        <li style="padding: 3px 0;">• Notifications sur mobile</li>
+                                    </ul>
+                                    <p style="margin-top: 10px; color: var(--accent); font-weight: 700;">⏱ Résultat : Anticipation vs réaction</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card reveal" style="margin-top: 60px; background: linear-gradient(135deg, rgba(78, 205, 196, 0.1), rgba(94, 59, 238, 0.1));">
+            <h3 style="font-size: 2rem; margin-bottom: 30px; color: var(--dark);">🌐 Présence Digitale : L'Option Complète</h3>
+            <p style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 30px;">
+                En complément des automatisations, nous pouvons aussi gérer <strong style="color: var(--primary);">votre image en ligne</strong> :
+            </p>
+            
+            <div style="display: flex; justify-content: space-around; align-items: stretch; gap: 30px; flex-wrap: wrap;">
+                <div style="text-align: center; padding: 20px; flex: 1; min-width: 200px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">🌐</div>
+                    <h4 style="color: var(--primary); margin-bottom: 10px;">Site Web Moderne</h4>
+                    <p>Création et mise à jour régulière<br>Espace copropriétaires sécurisé<br>Actualités et documents</p>
+                </div>
+                <div style="text-align: center; padding: 20px; flex: 1; min-width: 200px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">📱</div>
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">Réseaux Sociaux</h4>
+                    <p>Publications régulières<br>Réponses aux commentaires<br>Développement de communauté</p>
+                </div>
+                <div style="text-align: center; padding: 20px; flex: 1; min-width: 200px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 10px;">📧</div>
+                    <h4 style="color: var(--secondary); margin-bottom: 10px;">Marketing Digital</h4>
+                    <p>Newsletter automatisée<br>Campagnes ciblées<br>Génération de prospects</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card reveal" style="margin-top: 40px;">
+            <h3 style="font-size: 2rem; margin-bottom: 30px; color: var(--dark);">💡 Notre Approche Unique</h3>
+            <p style="font-size: 1.2rem; line-height: 1.8; margin-bottom: 30px;">
+                <strong style="color: var(--primary);">Nous ne vendons pas des outils, nous devenons votre équipe.</strong>
+            </p>
+            <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px;">
+                Contrairement aux solutions classiques qui vous vendent un logiciel et vous laissent vous débrouiller, nous prenons en charge l'intégralité de votre transformation digitale. Nous créons, nous gérons, nous maintenons, nous faisons évoluer. Vous n'avez qu'à superviser et valider.
+            </p>
+            <p style="font-size: 1.3rem; font-weight: 600; text-align: center; color: var(--primary); margin: 40px 0;">
+                Nous devenons votre équipe digitale. Vous restez focus sur votre métier.
+            </p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px;">
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">🚫</div>
+                    <h4 style="color: var(--secondary); margin-bottom: 10px;">Ce qu'on NE fait PAS</h4>
+                    <p>Vendre un logiciel et partir<br>Vous laisser vous débrouiller<br>Facturer chaque modification</p>
+                </div>
+                <div style="text-align: center; padding: 20px;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
+                    <h4 style="color: var(--accent); margin-bottom: 10px;">Ce qu'on FAIT</h4>
+                    <p>Gérer pour vous au quotidien<br>Rester à vos côtés<br>Évoluer en continu</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
             });
-          },{threshold:.1});
-          obs.observe(section);
+            
+            // Show selected tab
+            document.getElementById('tab-' + tabName).style.display = 'block';
+            
+            // Update button styles
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.style.background = 'var(--bg-light)';
+                btn.style.color = 'var(--text)';
+            });
+            
+            // Highlight active button
+            event.target.style.background = 'var(--gradient-1)';
+            event.target.style.color = 'white';
+        }
+    </script>
+
+    <!-- Section Processus -->
+    <section class="report-section" id="process">
+        <div class="section-header reveal">
+            <span class="section-badge">Chapitre 3</span>
+            <h2 class="section-title">Notre Méthodologie Éprouvée</h2>
+            <p class="section-subtitle">Une transformation progressive, maîtrisée et sans stress</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content reveal-left">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">Phase 1 : Diagnostic</h3>
+                    <p style="font-size: 1.1rem; margin-bottom: 15px;">Nous analysons vos processus actuels et identifions les priorités</p>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 5px 0;">✓ Audit complet de 2 jours sur site</li>
+                        <li style="padding: 5px 0;">✓ Cartographie des processus</li>
+                        <li style="padding: 5px 0;">✓ Identification des quick wins</li>
+                        <li style="padding: 5px 0;">✓ Proposition de feuille de route</li>
+                    </ul>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">Semaine 1</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content reveal-right">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">Phase 2 : Quick Wins</h3>
+                    <p style="font-size: 1.1rem; margin-bottom: 15px;">Résultats immédiats pour prouver la valeur</p>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 5px 0;">✓ Premières automatisations emails</li>
+                        <li style="padding: 5px 0;">✓ Création page LinkedIn</li>
+                        <li style="padding: 5px 0;">✓ Templates documents</li>
+                        <li style="padding: 5px 0;">✓ Gain de temps visible</li>
+                    </ul>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">Semaines 2-3</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content reveal-left">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">Phase 3 : Déploiement</h3>
+                    <p style="font-size: 1.1rem; margin-bottom: 15px;">Mise en place complète de la solution</p>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 5px 0;">✓ Site web en ligne</li>
+                        <li style="padding: 5px 0;">✓ Automatisations complètes</li>
+                        <li style="padding: 5px 0;">✓ Outils métier opérationnels</li>
+                        <li style="padding: 5px 0;">✓ Formation des équipes</li>
+                    </ul>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">Mois 2-3</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content reveal-right">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">Phase 4 : Optimisation</h3>
+                    <p style="font-size: 1.1rem; margin-bottom: 15px;">Amélioration continue et évolutions</p>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 5px 0;">✓ Analyse des performances</li>
+                        <li style="padding: 5px 0;">✓ Ajustements et optimisations</li>
+                        <li style="padding: 5px 0;">✓ Nouvelles fonctionnalités</li>
+                        <li style="padding: 5px 0;">✓ Accompagnement permanent</li>
+                    </ul>
+                </div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">Continu</div>
+            </div>
+        </div>
+
+        <div class="glass-card reveal">
+            <h3 style="font-size: 2rem; margin-bottom: 30px; color: var(--dark);">🎯 Les Engagements de Notre Méthodologie</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <div style="padding: 25px; background: var(--bg-light); border-radius: 15px;">
+                    <h4 style="color: var(--primary); margin-bottom: 15px;">📅 Planning Maîtrisé</h4>
+                    <p>Chaque étape est planifiée et validée avec vous. Pas de surprise, pas de dépassement.</p>
+                </div>
+                <div style="padding: 25px; background: var(--bg-light); border-radius: 15px;">
+                    <h4 style="color: var(--accent); margin-bottom: 15px;">👥 Implication Minimale</h4>
+                    <p>Nous faisons le maximum sans vous. Vous validez simplement les grandes orientations.</p>
+                </div>
+                <div style="padding: 25px; background: var(--bg-light); border-radius: 15px;">
+                    <h4 style="color: var(--secondary); margin-bottom: 15px;">📈 ROI Rapide</h4>
+                    <p>Gains de productivité visibles dès la 2ème semaine. Rentabilité garantie en 3 mois.</p>
+                </div>
+                <div style="padding: 25px; background: var(--bg-light); border-radius: 15px;">
+                    <h4 style="color: var(--gold); margin-bottom: 15px;">🔄 Évolution Continue</h4>
+                    <p>Pas de solution figée. Nous adaptons en permanence selon vos retours et besoins.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Résultats -->
+    <section class="report-section" id="results">
+        <div class="section-header reveal">
+            <span class="section-badge">Chapitre 4</span>
+            <h2 class="section-title">Situations Concrètes : Vous Vous Reconnaissez ?</h2>
+            <p class="section-subtitle">Des problèmes quotidiens transformés en solutions automatisées</p>
+        </div>
+
+        <div class="glass-card reveal">
+            <h3 style="font-size: 2rem; margin-bottom: 30px; color: var(--dark);">🔄 Scénario Type : La Journée d'un Syndic</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;">
+                <div>
+                    <h4 style="color: var(--secondary); margin-bottom: 20px;">😫 VOTRE QUOTIDIEN ACTUEL</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 10px 0; border-bottom: 1px solid var(--bg-light);"><strong>8h30 :</strong> 147 emails non lus depuis hier soir</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid var(--bg-light);"><strong>10h :</strong> Recherche d'un devis dans les emails de 2023</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid var(--bg-light);"><strong>11h :</strong> Relances manuelles pour les charges</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid var(--bg-light);"><strong>14h :</strong> Comparaison de 3 devis sur Excel</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid var(--bg-light);"><strong>16h :</strong> Préparation convocation AG</li>
+                        <li style="padding: 10px 0;"><strong>18h :</strong> Encore 73 emails à traiter...</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: var(--accent); margin-bottom: 20px;">✨ AVEC NOS AUTOMATISATIONS</h4>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 10px 0; border-bottom: 1px solid var(--bg-light);"><strong>8h30 :</strong> Emails triés, résumés prêts, urgent en haut</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid var(--bg-light);"><strong>9h :</strong> Devis retrouvé en 2 clics</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid var(--bg-light);"><strong>9h30 :</strong> Relances parties automatiquement à 8h</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid var(--bg-light);"><strong>10h :</strong> Tableau comparatif déjà généré</li>
+                        <li style="padding: 10px 0; border-bottom: 1px solid var(--bg-light);"><strong>11h :</strong> Convocation AG générée en 3 clics</li>
+                        <li style="padding: 10px 0;"><strong>12h :</strong> Temps pour développer l'activité !</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: var(--bg-light); padding: 30px; border-radius: 20px; text-align: center;">
+                <p style="font-size: 1.5rem; color: var(--primary); font-weight: 700; margin-bottom: 10px;">
+                    Résultat : 6 heures de travail → 3 heures
+                </p>
+                <p style="font-size: 1.2rem; color: var(--text);">
+                    50% de temps gagné chaque jour pour vous concentrer sur l'essentiel
+                </p>
+            </div>
+        </div>
+
+        <div class="glass-card reveal">
+            <h3 style="font-size: 2rem; margin-bottom: 30px; color: var(--dark);">💡 Cas Pratiques : Problèmes → Solutions</h3>
+            
+            <div style="display: grid; gap: 30px;">
+                <div style="padding: 25px; border-left: 4px solid var(--primary); background: var(--bg-light); border-radius: 0 15px 15px 0;">
+                    <h4 style="color: var(--primary); margin-bottom: 15px;">📧 "Je passe ma vie dans les emails"</h4>
+                    <p style="margin-bottom: 15px;"><strong>Problème :</strong> 200 emails par jour, mélangés entre tous les immeubles, urgences noyées dans la masse.</p>
+                    <p style="margin-bottom: 15px;"><strong>Solution mise en place :</strong> Tri automatique par immeuble + détection des urgences + résumés des fils longs + réponses automatiques aux questions courantes.</p>
+                    <p><strong style="color: var(--accent);">Gain :</strong> 2h30 économisées par jour, plus aucune urgence ratée</p>
+                </div>
+                
+                <div style="padding: 25px; border-left: 4px solid var(--accent); background: var(--bg-light); border-radius: 0 15px 15px 0;">
+                    <h4 style="color: var(--accent); margin-bottom: 15px;">💰 "Les impayés s'accumulent"</h4>
+                    <p style="margin-bottom: 15px;"><strong>Problème :</strong> Relances manuelles chronophages, oublis fréquents, taux d'impayés qui grimpe.</p>
+                    <p style="margin-bottom: 15px;"><strong>Solution mise en place :</strong> Relances automatiques par email/SMS + escalade progressive + suivi des promesses + tableau de bord temps réel.</p>
+                    <p><strong style="color: var(--accent);">Gain :</strong> -80% d'impayés en 3 mois, 0 temps passé sur les relances</p>
+                </div>
+                
+                <div style="padding: 25px; border-left: 4px solid var(--secondary); background: var(--bg-light); border-radius: 0 15px 15px 0;">
+                    <h4 style="color: var(--secondary); margin-bottom: 15px;">📊 "Comparer des devis me prend des heures"</h4>
+                    <p style="margin-bottom: 15px;"><strong>Problème :</strong> 5 devis PDF à comparer ligne par ligne, tableau Excel à créer manuellement.</p>
+                    <p style="margin-bottom: 15px;"><strong>Solution mise en place :</strong> Lecture automatique des PDF + comparaison intelligente + alerte prix anormaux + tableau de synthèse pour l'AG.</p>
+                    <p><strong style="color: var(--accent);">Gain :</strong> Décision éclairée en 5 minutes au lieu de 2 heures</p>
+                </div>
+
+                <div style="padding: 25px; border-left: 4px solid var(--gold); background: var(--bg-light); border-radius: 0 15px 15px 0;">
+                    <h4 style="color: var(--gold); margin-bottom: 15px;">🗂️ "Je ne retrouve jamais les documents"</h4>
+                    <p style="margin-bottom: 15px;"><strong>Problème :</strong> Documents éparpillés, nommage incohérent, recherches interminables.</p>
+                    <p style="margin-bottom: 15px;"><strong>Solution mise en place :</strong> Classement automatique par IA + nommage normalisé + recherche instantanée multicritères + archivage intelligent.</p>
+                    <p><strong style="color: var(--accent);">Gain :</strong> Tout document retrouvé en 2 clics maximum</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card reveal">
+            <h3 style="font-size: 2rem; margin-bottom: 30px; color: var(--dark);">📈 Impact Mesurable sur Votre Activité</h3>
+            
+            <div class="chart-container">
+                <h4 class="chart-title">Évolution Type sur 6 Mois</h4>
+                <canvas id="performanceChart"></canvas>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px;">
+                <div style="text-align: center; padding: 20px; background: var(--bg-light); border-radius: 15px;">
+                    <div style="font-size: 2.5rem; font-weight: 900; color: var(--primary); margin-bottom: 10px;">-70%</div>
+                    <p>Temps sur les tâches administratives</p>
+                </div>
+                <div style="text-align: center; padding: 20px; background: var(--bg-light); border-radius: 15px;">
+                    <div style="font-size: 2.5rem; font-weight: 900; color: var(--accent); margin-bottom: 10px;">+40%</div>
+                    <p>Nouveaux prospects grâce au digital</p>
+                </div>
+                <div style="text-align: center; padding: 20px; background: var(--bg-light); border-radius: 15px;">
+                    <div style="font-size: 2.5rem; font-weight: 900; color: var(--secondary); margin-bottom: 10px;">x3</div>
+                    <p>Vitesse de traitement des dossiers</p>
+                </div>
+                <div style="text-align: center; padding: 20px; background: var(--bg-light); border-radius: 15px;">
+                    <div style="font-size: 2.5rem; font-weight: 900; color: var(--gold); margin-bottom: 10px;">98%</div>
+                    <p>Satisfaction copropriétaires</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card reveal">
+            <h3 style="font-size: 2rem; margin-bottom: 30px; color: var(--dark);">🎯 Exemples d'Automatisations en Action</h3>
+            
+            <div style="display: grid; gap: 25px;">
+                <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft);">
+                    <h4 style="color: var(--primary); margin-bottom: 15px;">Automatisation #1 : Gestion d'un Sinistre Dégât des Eaux</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                        <div>
+                            <p style="font-weight: 600; margin-bottom: 10px;">🔴 Sans automatisation :</p>
+                            <ul style="font-size: 0.95rem; color: var(--text-light);">
+                                <li>Déclaration manuelle à rédiger</li>
+                                <li>Recherche des documents</li>
+                                <li>Relances manuelles de l'expert</li>
+                                <li>Suivi dans un tableau Excel</li>
+                                <li>Durée moyenne : 3 mois</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p style="font-weight: 600; margin-bottom: 10px;">🟢 Avec automatisation :</p>
+                            <ul style="font-size: 0.95rem; color: var(--text-light);">
+                                <li>Formulaire guidé étape par étape</li>
+                                <li>Documents joints automatiquement</li>
+                                <li>Relances automatiques programmées</li>
+                                <li>Dashboard de suivi en temps réel</li>
+                                <li>Durée moyenne : 1.5 mois</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft);">
+                    <h4 style="color: var(--secondary); margin-bottom: 15px;">Automatisation #2 : Préparation d'une AG</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                        <div>
+                            <p style="font-weight: 600; margin-bottom: 10px;">🔴 Sans automatisation :</p>
+                            <ul style="font-size: 0.95rem; color: var(--text-light);">
+                                <li>2 jours de préparation complète</li>
+                                <li>Convocations à personnaliser une par une</li>
+                                <li>Pouvoirs à gérer manuellement</li>
+                                <li>Comptage des votes sur papier</li>
+                                <li>PV à rédiger après coup</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p style="font-weight: 600; margin-bottom: 10px;">🟢 Avec automatisation :</p>
+                            <ul style="font-size: 0.95rem; color: var(--text-light);">
+                                <li>2 heures de préparation totale</li>
+                                <li>Convocations générées en masse</li>
+                                <li>Pouvoirs gérés en ligne</li>
+                                <li>Vote électronique instantané</li>
+                                <li>PV généré automatiquement</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 20px var(--shadow-soft);">
+                    <h4 style="color: var(--accent); margin-bottom: 15px;">Automatisation #3 : Suivi de Travaux de Ravalement</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                        <div>
+                            <p style="font-weight: 600; margin-bottom: 10px;">🔴 Sans automatisation :</p>
+                            <ul style="font-size: 0.95rem; color: var(--text-light);">
+                                <li>Appels quotidiens pour l'avancement</li>
+                                <li>Photos reçues par email à classer</li>
+                                <li>Retards découverts tardivement</li>
+                                <li>PV de réception à rédiger</li>
+                                <li>Stress permanent sur le timing</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p style="font-weight: 600; margin-bottom: 10px;">🟢 Avec automatisation :</p>
+                            <ul style="font-size: 0.95rem; color: var(--text-light);">
+                                <li>Demande automatique de photos</li>
+                                <li>Photos classées par date/zone</li>
+                                <li>Alertes immédiates si retard</li>
+                                <li>PV pré-rempli à valider</li>
+                                <li>Visibilité totale en temps réel</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card reveal">
+            <h3 style="font-size: 2rem; margin-bottom: 30px; color: var(--dark);">💰 Retour sur Investissement Garanti</h3>
+            
+            <div class="chart-container">
+                <h4 class="chart-title">Analyse du ROI Type</h4>
+                <canvas id="roiChart"></canvas>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(94, 59, 238, 0.1), rgba(78, 205, 196, 0.1)); padding: 30px; border-radius: 20px; margin-top: 30px;">
+                <h4 style="color: var(--dark); margin-bottom: 20px; text-align: center;">Calcul Simple du ROI</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; text-align: center;">
+                    <div>
+                        <p style="font-weight: 600; color: var(--primary);">Temps gagné/mois</p>
+                        <p style="font-size: 1.5rem; font-weight: 700;">60 heures</p>
+                    </div>
+                    <div>
+                        <p style="font-weight: 600; color: var(--accent);">Valeur horaire moyenne</p>
+                        <p style="font-size: 1.5rem; font-weight: 700;">50€</p>
+                    </div>
+                    <div>
+                        <p style="font-weight: 600; color: var(--secondary);">Économie mensuelle</p>
+                        <p style="font-size: 1.5rem; font-weight: 700;">3 000€</p>
+                    </div>
+                    <div>
+                        <p style="font-weight: 600; color: var(--gold);">Rentabilisé en</p>
+                        <p style="font-size: 1.5rem; font-weight: 700;">< 3 mois</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section CTA Finale -->
+    <section class="final-cta" id="contact">
+        <div class="final-cta-content reveal">
+            <h2>Prêt à Transformer Votre Activité avec l'IA ?</h2>
+            <p>Rejoignez les syndics qui dominent leur marché grâce à l'automatisation intelligente</p>
+            
+            <div style="background: rgba(255, 255, 255, 0.2); padding: 25px; border-radius: 20px; margin: 40px auto; max-width: 800px; backdrop-filter: blur(10px);">
+                <h3 style="color: white; margin-bottom: 20px; font-size: 1.5rem;">🔒 Nos Garanties Exclusives</h3>
+                <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
+                    <div style="text-align: center; flex: 1; min-width: 150px;">
+                        <div style="font-size: 2rem; margin-bottom: 10px;">💰</div>
+                        <p style="color: white; font-weight: 600;">Satisfait ou Remboursé</p>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">30 jours d'essai</p>
+                    </div>
+                    <div style="text-align: center; flex: 1; min-width: 150px;">
+                        <div style="font-size: 2rem; margin-bottom: 10px;">🔓</div>
+                        <p style="color: white; font-weight: 600;">Sans Engagement</p>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">Résiliable à tout moment</p>
+                    </div>
+                    <div style="text-align: center; flex: 1; min-width: 150px;">
+                        <div style="font-size: 2rem; margin-bottom: 10px;">⚡</div>
+                        <p style="color: white; font-weight: 600;">Mise en Place Express</p>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">Opérationnel en 48h</p>
+                    </div>
+                    <div style="text-align: center; flex: 1; min-width: 150px;">
+                        <div style="font-size: 2rem; margin-bottom: 10px;">📈</div>
+                        <p style="color: white; font-weight: 600;">ROI Garanti en 1 mois</p>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem;">Rentable dès le 1er mois</p>
+                    </div>
+                </div>
+            </div>
+
+            <a href="#" class="final-cta-button" onclick="showContactForm()">Réserver Mon Créneau (15 min)</a>
+            
+            <div style="margin-top: 60px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; max-width: 900px; margin-left: auto; margin-right: auto;">
+                <div style="text-align: center; flex: 1; min-width: 180px;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">📞</div>
+                    <p style="color: rgba(255,255,255,0.9);">Consultation<br>15 minutes chrono</p>
+                </div>
+                <div style="text-align: center; flex: 1; min-width: 180px;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">📊</div>
+                    <p style="color: rgba(255,255,255,0.9);">Audit personnalisé<br>Sans engagement</p>
+                </div>
+                <div style="text-align: center; flex: 1; min-width: 180px;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🚀</div>
+                    <p style="color: rgba(255,255,255,0.9);">Démarrage rapide<br>Quick wins en 48h</p>
+                </div>
+                <div style="text-align: center; flex: 1; min-width: 180px;">
+                    <div style="font-size: 2rem; margin-bottom: 10px;">🎯</div>
+                    <p style="color: rgba(255,255,255,0.9);">Places limitées<br>12 syndics max/mois</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Notre Mission</h3>
+                <p style="line-height: 1.8;">Spécialistes passionnés de l'IA appliquée à l'immobilier. Nous transformons la technologie complexe en solutions simples qui libèrent votre potentiel.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Services IA</h3>
+                <a href="#services">Automatisations Intelligentes</a><br>
+                <a href="#services">Assistants Virtuels</a><br>
+                <a href="#services">Analyse Prédictive</a><br>
+                <a href="#services">Outils Sur Mesure</a>
+            </div>
+            <div class="footer-column">
+                <h3>Ressources</h3>
+                <a href="#">Guide IA pour Syndics</a><br>
+                <a href="#">Calculateur de ROI</a><br>
+                <a href="#">Webinaire Gratuit</a><br>
+                <a href="#">Cas d'Usage</a>
+            </div>
+            <div class="footer-column">
+                <h3>Contact Direct</h3>
+                <p>📞 07 60 88 43 20</p>
+                <p>✉️ hayoun.yossi@gmail.com</p>
+                
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Syndics Futur - Spécialistes IA & Automatisation. L'intelligence artificielle au service de votre excellence. | <a href="#" style="color: rgba(255,255,255,0.5);">Mentions légales</a> | <a href="#" style="color: rgba(255,255,255,0.5);">RGPD</a></p>
+        </div>
+    </footer>
+
+    <!-- Scroll to top -->
+    <div class="scroll-to-top" id="scrollToTop" onclick="scrollToTop()">
+        ↑
+    </div>
+
+    <script>
+        // Configuration des particules
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: '#5E3BEE'
+                },
+                shape: {
+                    type: 'circle'
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false
+                },
+                size: {
+                    value: 3,
+                    random: true
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#5E3BEE',
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: 'grab'
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: 'push'
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        line_linked: {
+                            opacity: 0.5
+                        }
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
+            },
+            retina_detect: true
         });
-      }
-      animateSections();
-    });
-  </script>
+
+        // Typed.js pour le texte animé
+        var typed = new Typed('#typed-text', {
+            strings: [
+                'Gagnez 3 heures par jour grâce à l\'IA sans embaucher',
+                'Vos concurrents utilisent déjà l\'IA. Et vous ?',
+                'Automatisation complète • Assistant 24/7 • ROI immédiat'
+            ],
+            typeSpeed: 50,
+            backSpeed: 30,
+            backDelay: 2000,
+            loop: true
+        });
+
+        // Animation des compteurs
+        const counters = document.querySelectorAll('.stat-number');
+        const speed = 200;
+        
+        const countUp = (counter) => {
+            const target = parseFloat(counter.getAttribute('data-target'));
+            const increment = target / speed;
+            let current = 0;
+            
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    counter.textContent = Math.ceil(current);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    if (target % 1 !== 0) {
+                        counter.textContent = target;
+                    } else {
+                        counter.textContent = Math.ceil(target);
+                    }
+                }
+            };
+            
+            updateCounter();
+        };
+
+        // Intersection Observer pour les animations au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    // Déclencher les compteurs
+                    if (entry.target.classList.contains('stat-card')) {
+                        const counter = entry.target.querySelector('.stat-number');
+                        if (counter && !counter.classList.contains('counted')) {
+                            counter.classList.add('counted');
+                            countUp(counter);
+                        }
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observer tous les éléments avec classe reveal
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Observer les stat cards
+        document.querySelectorAll('.stat-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Progress bar et scroll effects
+        window.addEventListener('scroll', () => {
+            // Progress bar
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+            
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            // Scroll to top button
+            const scrollToTopBtn = document.getElementById('scrollToTop');
+            if (window.scrollY > 500) {
+                scrollToTopBtn.classList.add('active');
+            } else {
+                scrollToTopBtn.classList.remove('active');
+            }
+        });
+
+        // Navigation active state
+        const sections = document.querySelectorAll('section[id]');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href').slice(1) === current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll pour les liens
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll to top function
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Hide loader after page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 500);
+        });
+
+        // Charts.js - Graphiques
+        // Chart 1: Défis principaux
+        const ctx1 = document.getElementById('challengesChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['IA des concurrents', 'Exigences clients', 'Rentabilité', 'Acquisition', 'Conformité'],
+                datasets: [{
+                    label: 'Niveau de criticité (%)',
+                    data: [95, 88, 82, 78, 72],
+                    backgroundColor: [
+                        'rgba(255, 107, 107, 0.8)',
+                        'rgba(94, 59, 238, 0.8)',
+                        'rgba(78, 205, 196, 0.8)',
+                        'rgba(255, 215, 0, 0.8)',
+                        'rgba(139, 92, 246, 0.8)'
+                    ],
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // Chart 3: Performance evolution
+        const ctx3 = document.getElementById('performanceChart').getContext('2d');
+        new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: ['Mois 1', 'Mois 2', 'Mois 3', 'Mois 4', 'Mois 5', 'Mois 6'],
+                datasets: [
+                    {
+                        label: 'Productivité (%)',
+                        data: [100, 115, 135, 148, 158, 162],
+                        borderColor: 'rgba(94, 59, 238, 1)',
+                        backgroundColor: 'rgba(94, 59, 238, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Satisfaction clients (%)',
+                        data: [65, 68, 75, 82, 88, 90],
+                        borderColor: 'rgba(78, 205, 196, 1)',
+                        backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Nouveaux prospects',
+                        data: [10, 12, 18, 25, 32, 40],
+                        borderColor: 'rgba(255, 107, 107, 1)',
+                        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Chart 4: ROI
+        const ctx4 = document.getElementById('roiChart').getContext('2d');
+        new Chart(ctx4, {
+            type: 'radar',
+            data: {
+                labels: ['Gain de temps', 'Nouveaux clients', 'Satisfaction', 'Image modernisée', 'Efficacité', 'Réduction erreurs'],
+                datasets: [{
+                    label: 'Avant',
+                    data: [30, 20, 40, 25, 35, 45],
+                    borderColor: 'rgba(255, 107, 107, 1)',
+                    backgroundColor: 'rgba(255, 107, 107, 0.2)'
+                },
+                {
+                    label: 'Après 6 mois',
+                    data: [85, 75, 90, 88, 92, 87],
+                    borderColor: 'rgba(94, 59, 238, 1)',
+                    backgroundColor: 'rgba(94, 59, 238, 0.2)'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animation des service cards
+        gsap.utils.toArray('.service-card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 80%',
+                    toggleActions: 'play none none reverse'
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                delay: i * 0.1,
+                ease: 'power3.out'
+            });
+        });
+
+        // Animation du hero content
+        gsap.timeline()
+            .from('.hero-badge', { opacity: 0, y: -20, duration: 0.8 })
+            .from('.hero-title', { opacity: 0, y: 30, duration: 1 }, '-=0.4')
+            .from('.hero-subtitle', { opacity: 0, y: 20, duration: 0.8 }, '-=0.4')
+            .from('.cta-button', { opacity: 0, scale: 0.9, duration: 0.6, stagger: 0.2 }, '-=0.3');
+
+        // Fonction pour afficher le formulaire de contact
+        function showContactForm() {
+            alert('Formulaire de contact - Intégration à venir avec votre système CRM');
+        }
+    </script>
 </body>
 </html>
